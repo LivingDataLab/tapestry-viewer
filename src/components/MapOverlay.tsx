@@ -60,7 +60,7 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
       // Animate zoom
       map.easeTo({
         zoom: 12.5,
-        duration: 44000,
+        duration: 3000,
         easing: (t) => t, // linear
       });
     });
@@ -77,7 +77,7 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
         position: "absolute",
         bottom: 0,
         left: "50%",
-        transform: "translateX(-50%)",
+        transform: "translateX(-50%) translateY(calc(50% - 250px))",
         width: "1950px",
         height: "870px",
         zIndex: 1,
@@ -100,7 +100,7 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
             width: "1700px",
             height: "700px",
             borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 65%, transparent 80%)",
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, transparent 85%)",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -116,7 +116,7 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           pointerEvents: "none",
           maskImage: "radial-gradient(ellipse 750px 340px at center 45%, black 0%, black 50%, transparent 75%)",
           WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 45%, black 0%, black 50%, transparent 75%)",
-          opacity: 0.6,
+          opacity: 0.85,
         }}
       />
       <style>{`

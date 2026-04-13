@@ -8,6 +8,7 @@ const BASE_IMAGE_URL =
 
 const DISPLAY_DURATION = 45000;
 const WIPE_HALF = 800; // time for each half of the wipe
+const OVERLAY_FADE_DELAY = 500; // delay before overlays fade in after wipe
 
 export interface PanoRow {
   city: string;
@@ -26,6 +27,7 @@ export function useCsvData() {
   const [showAnnotated, setShowAnnotated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [wipePhase, setWipePhase] = useState<WipePhase>("none");
+  const [overlaysVisible, setOverlaysVisible] = useState(true);
 
   useEffect(() => {
     Papa.parse(CSV_URL, {
@@ -51,6 +53,7 @@ export function useCsvData() {
   }, []);
 
   const advanceRow = useCallback(() => {
+    setOverlaysVisible(false);
     // Phase 1: cover screen with black from top-left
     setWipePhase("covering");
     // At full coverage, switch content and start reveal
@@ -59,10 +62,13 @@ export function useCsvData() {
       setShowAnnotated(false);
       setWipePhase("revealing");
     }, WIPE_HALF);
-    // Phase 2 complete: reveal done
+    // Phase 2 complete: reveal done, then fade in overlays
     setTimeout(() => {
       setWipePhase("none");
     }, WIPE_HALF * 2);
+    setTimeout(() => {
+      setOverlaysVisible(true);
+    }, WIPE_HALF * 2 + OVERLAY_FADE_DELAY);
   }, [rows.length]);
 
   useEffect(() => {
@@ -82,7 +88,7 @@ export function useCsvData() {
 
   const currentRow = rows[currentIndex];
 
-  return { currentRow, showAnnotated, loading, rows, currentIndex, wipePhase };
+  return { currentRow, showAnnotated, loading, rows, currentIndex, wipePhase, overlaysVisible };
 }
 
 export { WIPE_HALF };
