@@ -28,14 +28,14 @@ const LoadingScreen = () => (
 );
 
 const Index = () => {
-  const { currentRow, loading } = useCsvData();
+  const { currentRow, currentImageUrl, loading } = useCsvData();
 
   if (loading || !currentRow) return <LoadingScreen />;
 
   return (
     <div style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh", overflow: "hidden" }}>
       <Suspense fallback={<LoadingScreen />}>
-        <PanoramaViewer key={currentRow.rawImageUrl} imageUrl={currentRow.rawImageUrl} />
+        <PanoramaViewer key={currentImageUrl} imageUrl={currentImageUrl} />
       </Suspense>
       <InfoOverlay
         data={{

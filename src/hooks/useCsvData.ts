@@ -6,17 +6,21 @@ const CSV_URL =
 const BASE_IMAGE_URL =
   "https://raw.githubusercontent.com/LivingDataLab/tapestries/main/panos/";
 
+const DISPLAY_DURATION = 45000; // 45 seconds per image
+
 export interface PanoRow {
   city: string;
   latitude: number;
   longitude: number;
   distanceToDetroit: number;
   rawImageUrl: string;
+  annotatedImageUrl: string;
 }
 
 export function useCsvData() {
   const [rows, setRows] = useState<PanoRow[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showAnnotated, setShowAnnotated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,6 +37,7 @@ export function useCsvData() {
             distanceToDetroit:
               parseFloat(row["Distance_to_CampusMartius_mi"]) || 0,
             rawImageUrl: BASE_IMAGE_URL + (row["raw_image"] || ""),
+            annotatedImageUrl: BASE_IMAGE_URL + (row["annotated_image"] || ""),
           }))
           .filter((r: PanoRow) => r.rawImageUrl !== BASE_IMAGE_URL);
         setRows(parsed);
@@ -42,12 +47,28 @@ export function useCsvData() {
   }, []);
 
   useEffect(() => {
-    if (rows.length <= 1) return;
+    if (rows.length === 0) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % rows.length);
-    }, 30000); // 30 seconds per panorama
+      setShowAnnotated((prev) => {
+        if (!prev) {
+          // Currently showing raw -> switch to annotated
+          return true;
+        } else {
+          // Currently showing annotated -> move to next row, show raw
+          setCurrentIndex((idx) => (idx + 1) % rows.length);
+          return false;
+        }
+      });
+    }, DISPLAY_DURATION);
     return () => clearInterval(interval);
   }, [rows.length]);
 
-  return { currentRow: rows[currentIndex], loading, rows, currentIndex };
+  const currentRow = rows[currentIndex];
+  const currentImageUrl = currentRow
+    ? showAnnotated
+      ? currentRow.annotatedImageUrl
+      : currentRow.rawImageUrl
+    : "";
+
+  return { currentRow, currentImageUrl, showAnnotated, loading, rows, currentIndex };
 }
