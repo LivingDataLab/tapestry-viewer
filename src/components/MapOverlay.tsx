@@ -63,11 +63,11 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
       .setLngLat([longitude, latitude])
       .addTo(annMap);
 
-    // Also add dot to raw map
+    // Also add dot to raw map (red)
     const dot2 = document.createElement("div");
     dot2.className = "pulsing-dot";
     const innerDot2 = document.createElement("div");
-    innerDot2.className = "pulse-dot";
+    innerDot2.className = "pulse-dot pulse-dot-red";
     dot2.appendChild(innerDot2);
     new mapboxgl.Marker({ element: dot2 })
       .setLngLat([longitude, latitude])
@@ -195,12 +195,12 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
       <style>{`
         .pulsing-dot {
           position: relative;
-          width: 18px;
-          height: 18px;
+          width: 27px;
+          height: 27px;
         }
         .pulse-dot {
-          width: 18px;
-          height: 18px;
+          width: 27px;
+          height: 27px;
           background-color: #ffffff;
           border-radius: 50%;
           position: absolute;
@@ -208,6 +208,9 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
           left: 50%;
           transform: translate(-50%, -50%);
           animation: pulse 2s infinite;
+        }
+        .pulse-dot-red {
+          background-color: #ff0000;
         }
         .pulse-dot::before {
           content: '';
@@ -220,6 +223,9 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
           background-color: #ffffff;
           transform: translate(-50%, -50%);
           animation: pulse-ring 2s infinite;
+        }
+        .pulse-dot-red::before {
+          background-color: #ff0000;
         }
         @keyframes pulse {
           0% { opacity: 1; }
