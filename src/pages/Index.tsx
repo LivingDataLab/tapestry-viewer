@@ -50,7 +50,7 @@ const Index = () => {
           distanceToDetroit: currentRow.distanceToDetroit,
         }}
       />
-      {/* Wipe from top-left transition */}
+      {/* Diagonal wipe from top-left to bottom-right through black */}
       <div
         style={{
           position: "fixed",
@@ -58,9 +58,27 @@ const Index = () => {
           zIndex: 100,
           background: "#000",
           pointerEvents: "none",
+          maskImage: wiping
+            ? "linear-gradient(135deg, black 0%, black 100%)"
+            : "linear-gradient(135deg, transparent 0%, transparent 100%)",
+          WebkitMaskImage: wiping
+            ? "linear-gradient(135deg, black 0%, black 100%)"
+            : "linear-gradient(135deg, transparent 0%, transparent 100%)",
+          opacity: wiping ? 1 : 0,
+          transition: `opacity ${WIPE_DURATION / 2}ms ease-in-out`,
+        }}
+      />
+      {/* Diagonal wipe overlay using clip-path polygon */}
+      <div
+        style={{
+          position: "fixed",
+          inset: "-10% -10% -10% -10%",
+          zIndex: 100,
+          background: "#000",
+          pointerEvents: "none",
           clipPath: wiping
-            ? "circle(200% at 0% 0%)"
-            : "circle(0% at 0% 0%)",
+            ? "polygon(0% 0%, 220% 0%, 0% 220%)"
+            : "polygon(0% 0%, 0% 0%, 0% 0%)",
           transition: `clip-path ${WIPE_DURATION / 2}ms ease-in-out`,
         }}
       />
