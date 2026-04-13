@@ -49,7 +49,7 @@ const InfoOverlay = ({ data }: InfoOverlayProps) => {
       <div
         style={{
           position: "absolute",
-          top: 0,
+          top: s(30),
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",

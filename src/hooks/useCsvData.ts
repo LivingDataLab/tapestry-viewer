@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Papa from "papaparse";
 
 const CSV_URL =
@@ -7,6 +7,7 @@ const BASE_IMAGE_URL =
   "https://raw.githubusercontent.com/LivingDataLab/tapestries/main/panos/";
 
 const DISPLAY_DURATION = 45000; // 45 seconds per image
+const WIPE_DURATION = 1200; // 1.2s wipe transition
 
 export interface PanoRow {
   city: string;
@@ -22,6 +23,7 @@ export function useCsvData() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnnotated, setShowAnnotated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [wiping, setWiping] = useState(false);
 
   useEffect(() => {
     Papa.parse(CSV_URL, {
@@ -46,29 +48,38 @@ export function useCsvData() {
     });
   }, []);
 
+  const advanceRow = useCallback(() => {
+    // Start wipe
+    setWiping(true);
+    // At midpoint of wipe (screen fully black), switch row
+    setTimeout(() => {
+      setCurrentIndex((idx) => (idx + 1) % rows.length);
+      setShowAnnotated(false);
+    }, WIPE_DURATION / 2);
+    // End wipe
+    setTimeout(() => {
+      setWiping(false);
+    }, WIPE_DURATION);
+  }, [rows.length]);
+
   useEffect(() => {
     if (rows.length === 0) return;
     const interval = setInterval(() => {
       setShowAnnotated((prev) => {
         if (!prev) {
-          // Currently showing raw -> switch to annotated
           return true;
         } else {
-          // Currently showing annotated -> move to next row, show raw
-          setCurrentIndex((idx) => (idx + 1) % rows.length);
-          return false;
+          advanceRow();
+          return prev; // keep true until wipe midpoint resets it
         }
       });
     }, DISPLAY_DURATION);
     return () => clearInterval(interval);
-  }, [rows.length]);
+  }, [rows.length, advanceRow]);
 
   const currentRow = rows[currentIndex];
-  const currentImageUrl = currentRow
-    ? showAnnotated
-      ? currentRow.annotatedImageUrl
-      : currentRow.rawImageUrl
-    : "";
 
-  return { currentRow, currentImageUrl, showAnnotated, loading, rows, currentIndex };
+  return { currentRow, showAnnotated, loading, rows, currentIndex, wiping };
 }
+
+export { WIPE_DURATION };
