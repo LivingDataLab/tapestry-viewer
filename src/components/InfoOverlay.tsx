@@ -9,11 +9,12 @@ interface InfoOverlayProps {
   data: LocationData;
   showAnnotated: boolean;
   isWiping?: boolean;
+  overlaysVisible?: boolean;
 }
 
 const s = (px: number) => `${(px / 3840) * 100}vw`;
 
-const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
+const InfoOverlay = ({ data, showAnnotated, isWiping, overlaysVisible = true }: InfoOverlayProps) => {
   const latDir = data.latitude >= 0 ? "N" : "S";
   const lonDir = data.longitude <= 0 ? "W" : "E";
   const latDisplay = Math.abs(data.latitude).toFixed(2);
