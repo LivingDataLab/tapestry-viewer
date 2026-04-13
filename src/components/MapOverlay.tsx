@@ -8,61 +8,101 @@ mapboxgl.accessToken =
 interface MapOverlayProps {
   latitude: number;
   longitude: number;
+  showAnnotated: boolean;
 }
 
-const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
+const MASK =
+  "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)";
+
+const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => {
+  const rawContainerRef = useRef<HTMLDivElement>(null);
+  const annContainerRef = useRef<HTMLDivElement>(null);
+  const rawMapRef = useRef<mapboxgl.Map | null>(null);
+  const annMapRef = useRef<mapboxgl.Map | null>(null);
+
+  const detroitCenter: [number, number] = [-83.0458, 42.3314];
+
+  // Shared map options
+  const sharedOpts = {
+    center: detroitCenter as [number, number],
+    zoom: 10.15,
+    pitch: 65,
+    bearing: 0,
+    interactive: false,
+    attributionControl: false,
+  };
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!rawContainerRef.current || !annContainerRef.current) return;
 
-    // Downtown Detroit as starting center
-    const detroitCenter: [number, number] = [-83.0458, 42.3314];
-
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: "mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5",
-      center: detroitCenter,
-      zoom: 10.15,
-      pitch: 65,
-      bearing: 0,
-      interactive: false,
-      attributionControl: false,
+    // --- Raw map (shown during raw_image) ---
+    const rawMap = new mapboxgl.Map({
+      container: rawContainerRef.current,
+      style: "mapbox://styles/theavclub/cmnwlu0fm001601qvamstaa1w",
+      ...sharedOpts,
     });
+    rawMapRef.current = rawMap;
 
-    mapRef.current = map;
+    // --- Annotated map (shown during annotated_image) ---
+    const annMap = new mapboxgl.Map({
+      container: annContainerRef.current,
+      style: "mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5",
+      ...sharedOpts,
+    });
+    annMapRef.current = annMap;
 
-    // Create pulsing dot marker
+    // Pulsing dot on annotated map
     const dot = document.createElement("div");
     dot.className = "pulsing-dot";
     const innerDot = document.createElement("div");
     innerDot.className = "pulse-dot";
     dot.appendChild(innerDot);
-
     new mapboxgl.Marker({ element: dot })
       .setLngLat([longitude, latitude])
-      .addTo(map);
+      .addTo(annMap);
 
-    map.on("load", () => {
-      // Make land/water layers translucent
-      const style = map.getStyle();
+    // Also add dot to raw map
+    const dot2 = document.createElement("div");
+    dot2.className = "pulsing-dot";
+    const innerDot2 = document.createElement("div");
+    innerDot2.className = "pulse-dot";
+    dot2.appendChild(innerDot2);
+    new mapboxgl.Marker({ element: dot2 })
+      .setLngLat([longitude, latitude])
+      .addTo(rawMap);
+
+    // Annotated map: make land/water translucent
+    annMap.on("load", () => {
+      const style = annMap.getStyle();
       if (style?.layers) {
         for (const layer of style.layers) {
-          const type = layer.type;
-          if (type === "background") {
-            map.setPaintProperty(layer.id, "background-opacity", 0);
-          } else if (type === "fill" && layer.id !== "road") {
+          if (layer.type === "background") {
+            annMap.setPaintProperty(layer.id, "background-opacity", 0);
+          } else if (layer.type === "fill" && layer.id !== "road") {
             try {
-              map.setPaintProperty(layer.id, "fill-opacity", 0.15);
+              annMap.setPaintProperty(layer.id, "fill-opacity", 0.15);
             } catch {}
           }
         }
       }
+    });
 
-      // Animate zoom after 7.5s delay, pan to CSV location over 5s
+    // Zoom sequence on annotated map after 7.5s
+    annMap.on("load", () => {
       setTimeout(() => {
-        map.flyTo({
+        annMap.flyTo({
+          center: [longitude, latitude],
+          zoom: 12.5,
+          duration: 5000,
+          easing: (t) => t,
+        });
+      }, 7500);
+    });
+
+    // Same zoom on raw map so they stay in sync
+    rawMap.on("load", () => {
+      setTimeout(() => {
+        rawMap.flyTo({
           center: [longitude, latitude],
           zoom: 12.5,
           duration: 5000,
@@ -72,8 +112,10 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
     });
 
     return () => {
-      map.remove();
-      mapRef.current = null;
+      rawMap.remove();
+      annMap.remove();
+      rawMapRef.current = null;
+      annMapRef.current = null;
     };
   }, [latitude, longitude]);
 
@@ -90,7 +132,7 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
         pointerEvents: "none",
       }}
     >
-      {/* Translucent black circle with feathered edges */}
+      {/* Translucent black circle backdrop */}
       <div
         style={{
           position: "absolute",
@@ -106,7 +148,8 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
             width: "1700px",
             height: "700px",
             borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 60%, transparent 70%)",
+            background:
+              "radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 60%, transparent 70%)",
             position: "absolute",
             top: "50%",
             left: "50%",
@@ -114,17 +157,39 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           }}
         />
       </div>
+
+      {/* Raw map layer (66% opacity, visible during raw_image) */}
       <div
-        ref={containerRef}
+        ref={rawContainerRef}
         style={{
+          position: "absolute",
+          inset: 0,
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          maskImage: "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)",
-          opacity: 1,
+          maskImage: MASK,
+          WebkitMaskImage: MASK,
+          opacity: showAnnotated ? 0 : 0.66,
+          transition: "opacity 1s ease-in-out",
         }}
       />
+
+      {/* Annotated map layer (100% opacity, visible during annotated_image) */}
+      <div
+        ref={annContainerRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          maskImage: MASK,
+          WebkitMaskImage: MASK,
+          opacity: showAnnotated ? 1 : 0,
+          transition: "opacity 1s ease-in-out",
+        }}
+      />
+
       <style>{`
         .pulsing-dot {
           position: relative;
