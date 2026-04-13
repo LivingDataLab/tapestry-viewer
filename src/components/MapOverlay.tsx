@@ -33,6 +33,9 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
     // Create pulsing dot marker
     const dot = document.createElement("div");
     dot.className = "pulsing-dot";
+    const innerDot = document.createElement("div");
+    innerDot.className = "pulse-dot";
+    dot.appendChild(innerDot);
 
     new mapboxgl.Marker({ element: dot })
       .setLngLat([longitude, latitude])
@@ -73,32 +76,86 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
       style={{
         position: "absolute",
         bottom: 0,
-        left: 0,
-        right: 0,
-        height: "55%",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "1950px",
+        height: "870px",
         zIndex: 1,
         pointerEvents: "none",
-        maskImage: "linear-gradient(to bottom, transparent 0%, black 35%, black 70%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 35%, black 70%, transparent 100%)",
-        opacity: 0.6,
       }}
     >
+      {/* Translucent black circle with feathered edges */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          pointerEvents: "none",
+        }}
+      >
+        <div
+          style={{
+            width: "1700px",
+            height: "700px",
+            borderRadius: "50%",
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 65%, transparent 80%)",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -40%)",
+          }}
+        />
+      </div>
       <div
         ref={containerRef}
-        style={{ width: "100%", height: "100%", pointerEvents: "none" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          maskImage: "radial-gradient(ellipse 750px 340px at center 45%, black 0%, black 50%, transparent 75%)",
+          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 45%, black 0%, black 50%, transparent 75%)",
+          opacity: 0.6,
+        }}
       />
       <style>{`
         .pulsing-dot {
-          width: 14px;
-          height: 14px;
-          background: white;
-          border-radius: 50%;
-          box-shadow: 0 0 6px 2px rgba(255,255,255,0.8);
-          animation: pulse-dot 2s ease-in-out infinite;
+          position: relative;
+          width: 18px;
+          height: 18px;
         }
-        @keyframes pulse-dot {
-          0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 6px 2px rgba(255,255,255,0.8); }
-          50% { transform: scale(1.6); opacity: 0.7; box-shadow: 0 0 16px 6px rgba(255,255,255,0.5); }
+        .pulse-dot {
+          width: 18px;
+          height: 18px;
+          background-color: #ffffff;
+          border-radius: 50%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          animation: pulse 2s infinite;
+        }
+        .pulse-dot::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: #ffffff;
+          transform: translate(-50%, -50%);
+          animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse {
+          0% { opacity: 1; }
+          50% { opacity: 0.5; }
+          100% { opacity: 1; }
+        }
+        @keyframes pulse-ring {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+          100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
         }
         .mapboxgl-canvas { pointer-events: none !important; }
       `}</style>
