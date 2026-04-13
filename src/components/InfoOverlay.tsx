@@ -62,7 +62,7 @@ const InfoOverlay = ({ data }: InfoOverlayProps) => {
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 500,
-              fontSize: "78px",
+              fontSize: "75px",
               color: "hsl(var(--foreground))",
               position: "relative",
               zIndex: 1,
@@ -90,7 +90,7 @@ const InfoOverlay = ({ data }: InfoOverlayProps) => {
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 600,
-                fontSize: "29px",
+                fontSize: "28px",
                 color: "hsl(var(--foreground))",
               }}
             >
@@ -112,7 +112,7 @@ const InfoOverlay = ({ data }: InfoOverlayProps) => {
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 600,
-                fontSize: "29px",
+                fontSize: "28px",
                 color: "hsl(var(--foreground))",
               }}
             >
