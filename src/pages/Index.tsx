@@ -62,21 +62,6 @@ const Index = () => {
           showAnnotated={showAnnotated}
         />
       </Suspense>
-      {/* Bottom fade – between pano and map */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: `${((357.73 + 855) / 3840) * 100}vw`,
-          background: "var(--bottom-fade)",
-          zIndex: 0,
-          pointerEvents: "none",
-          opacity: overlaysVisible ? 1 : 0,
-          transition: "opacity 1s ease-in-out",
-        }}
-      />
       <div
         style={{
           opacity: overlaysVisible ? 1 : 0,

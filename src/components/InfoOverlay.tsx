@@ -165,6 +165,17 @@ const InfoOverlay = ({ data, showAnnotated, isWiping, overlaysVisible = true }: 
           </div>
         </div>
 
+        {/* Bottom fade */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: s(357.73),
+            background: "var(--bottom-fade)",
+          }}
+        />
       </div>
 
       {/* Development Preview badge – always visible */}
