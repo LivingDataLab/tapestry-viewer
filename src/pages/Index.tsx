@@ -54,30 +54,15 @@ const Index = () => {
       <div
         style={{
           position: "fixed",
-          inset: 0,
-          zIndex: 100,
-          background: "#000",
-          pointerEvents: "none",
-          maskImage: wiping
-            ? "linear-gradient(135deg, black 0%, black 100%)"
-            : "linear-gradient(135deg, transparent 0%, transparent 100%)",
-          WebkitMaskImage: wiping
-            ? "linear-gradient(135deg, black 0%, black 100%)"
-            : "linear-gradient(135deg, transparent 0%, transparent 100%)",
-          opacity: wiping ? 1 : 0,
-          transition: `opacity ${WIPE_DURATION / 2}ms ease-in-out`,
-        }}
-      />
-      {/* Diagonal wipe overlay using clip-path polygon */}
-      <div
-        style={{
-          position: "fixed",
-          inset: "-10% -10% -10% -10%",
+          top: "-10%",
+          left: "-10%",
+          width: "120%",
+          height: "120%",
           zIndex: 100,
           background: "#000",
           pointerEvents: "none",
           clipPath: wiping
-            ? "polygon(0% 0%, 220% 0%, 0% 220%)"
+            ? "polygon(0% 0%, 250% 0%, 0% 250%)"
             : "polygon(0% 0%, 0% 0%, 0% 0%)",
           transition: `clip-path ${WIPE_DURATION / 2}ms ease-in-out`,
         }}
