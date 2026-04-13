@@ -59,7 +59,7 @@ const Index = () => {
       width: "100vw",
       height: "100vh",
       overflow: "hidden",
-      border: showAnnotated ? "5px solid #3B82F6" : "none",
+      border: showAnnotated ? "5px solid #0000ff" : "none",
       transition: "border 1s ease-in-out",
       boxSizing: "border-box",
     }}>
