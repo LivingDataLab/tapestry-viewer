@@ -7,7 +7,7 @@ const BASE_IMAGE_URL =
   "https://raw.githubusercontent.com/LivingDataLab/tapestries/main/panos/";
 
 const DISPLAY_DURATION = 45000;
-const WIPE_HALF = 1200; // time for each half of the wipe
+const WIPE_HALF = 800; // time for each half of the wipe
 
 export interface PanoRow {
   city: string;
