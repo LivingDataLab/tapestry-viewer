@@ -30,7 +30,7 @@
 
     --info-bar-left: linear-gradient(to right, #000000 0%, #070809 10%, #1c1f24 28%, #3d444e 49%, #3f464f 94%, #414850 100%);
     --info-bar-right: linear-gradient(to right, #000000 0%, #070809 10%, #1c1f24 28%, #3d444e 49%, #3f464f 94%, #414850 100%);
-    --bottom-fade: linear-gradient(to bottom, transparent, rgba(0,0,0,0.64) 65%, #0e0e0e 88%, #000000);
+    --bottom-fade: linear-gradient(to bottom, transparent, rgba(0,0,0,0.64) 50%, #0e0e0e 72%, #000000 85%);
 
     --font-display: 'Nunito Sans', sans-serif;
   }
