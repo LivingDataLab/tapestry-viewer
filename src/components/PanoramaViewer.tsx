@@ -16,8 +16,8 @@ const PanoramaSphere = ({ imageUrl }: PanoramaSphereProps) => {
 
   useFrame((_, delta) => {
     if (meshRef.current) {
-      // Full 360° rotation in 30 seconds
-      meshRef.current.rotation.y += (Math.PI * 2 * delta) / 30;
+      // Full 360° rotation in 45 seconds
+      meshRef.current.rotation.y += (Math.PI * 2 * delta) / 45;
     }
   });
 
