@@ -7,6 +7,7 @@ interface LocationData {
 
 interface InfoOverlayProps {
   data: LocationData;
+  showAnnotated: boolean;
 }
 
 /*
@@ -29,7 +30,7 @@ interface InfoOverlayProps {
  */
 const s = (px: number) => `${(px / 3840) * 100}vw`;
 
-const InfoOverlay = ({ data }: InfoOverlayProps) => {
+const InfoOverlay = ({ data, showAnnotated }: InfoOverlayProps) => {
   const latDir = data.latitude >= 0 ? "N" : "S";
   const lonDir = data.longitude <= 0 ? "W" : "E";
   const latDisplay = Math.abs(data.latitude).toFixed(2);
@@ -166,6 +167,49 @@ const InfoOverlay = ({ data }: InfoOverlayProps) => {
         >
           DEVELOPMENT PREVIEW
         </span>
+      </div>
+
+      {/* Machine Vision View bar */}
+      <div
+        style={{
+          position: "absolute",
+          top: s(30),
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: s(1134),
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          pointerEvents: "none",
+        }}
+      >
+        <div style={{ height: s(215) }} /> {/* spacer for city + tabs */}
+        <div
+          style={{
+            width: "100%",
+            height: s(50),
+            background: "#2424e6",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transform: showAnnotated ? "translateY(0)" : `translateY(${s(-50)})`,
+            opacity: showAnnotated ? 1 : 0,
+            transition: "transform 1.5s ease-out, opacity 1.5s ease-out",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Ubuntu Mono', monospace",
+              fontWeight: 400,
+              fontSize: s(29),
+              color: "hsl(var(--foreground))",
+              whiteSpace: "nowrap",
+              lineHeight: 1,
+            }}
+          >
+            Machine Vision View
+          </span>
+        </div>
       </div>
 
       {/* Bottom fade: y=1802.27 to y=2160, height=357.73 */}

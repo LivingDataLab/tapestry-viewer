@@ -91,6 +91,7 @@ const Index = () => {
           longitude: currentRow.longitude,
           distanceToDetroit: currentRow.distanceToDetroit,
         }}
+        showAnnotated={showAnnotated}
       />
       {/* Diagonal wipe overlay */}
       <div
