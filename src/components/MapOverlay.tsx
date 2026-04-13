@@ -17,10 +17,13 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Downtown Detroit as starting center
+    const detroitCenter: [number, number] = [-83.0458, 42.3314];
+
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: "mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5",
-      center: [longitude, latitude],
+      center: detroitCenter,
       zoom: 10.15,
       pitch: 65,
       bearing: 0,
