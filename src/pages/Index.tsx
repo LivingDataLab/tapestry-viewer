@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import PanoramaViewer from "@/components/PanoramaViewer";
 import InfoOverlay from "@/components/InfoOverlay";
 import MapOverlay from "@/components/MapOverlay";
+import BottomInfoBoxes from "@/components/BottomInfoBoxes";
 import { useCsvData, WIPE_HALF } from "@/hooks/useCsvData";
 import type { WipePhase } from "@/hooks/useCsvData";
 
@@ -94,6 +95,10 @@ const Index = () => {
         showAnnotated={showAnnotated}
         isWiping={isWiping}
         overlaysVisible={overlaysVisible}
+      />
+      <BottomInfoBoxes
+        overlaysVisible={overlaysVisible}
+        showAnnotated={showAnnotated}
       />
       {/* Diagonal wipe overlay */}
       <div
