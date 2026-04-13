@@ -96,6 +96,10 @@ const Index = () => {
         isWiping={isWiping}
         overlaysVisible={overlaysVisible}
       />
+      <BottomInfoBoxes
+        overlaysVisible={overlaysVisible}
+        showAnnotated={showAnnotated}
+      />
       {/* Diagonal wipe overlay */}
       <div
         style={{
