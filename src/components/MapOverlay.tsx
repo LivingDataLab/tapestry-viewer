@@ -171,7 +171,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
           pointerEvents: "none",
           maskImage: MASK_RAW,
           WebkitMaskImage: MASK_RAW,
-          opacity: showAnnotated ? 0 : 0.56,
+          opacity: showAnnotated ? 0 : 0.66,
           transition: "opacity 1s ease-in-out",
         }}
       />
