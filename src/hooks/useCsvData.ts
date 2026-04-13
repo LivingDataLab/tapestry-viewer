@@ -6,8 +6,8 @@ const CSV_URL =
 const BASE_IMAGE_URL =
   "https://raw.githubusercontent.com/LivingDataLab/tapestries/main/panos/";
 
-const DISPLAY_DURATION = 45000; // 45 seconds per image
-const WIPE_DURATION = 1200; // 1.2s wipe transition
+const DISPLAY_DURATION = 45000;
+const WIPE_HALF = 1200; // time for each half of the wipe
 
 export interface PanoRow {
   city: string;
@@ -18,12 +18,14 @@ export interface PanoRow {
   annotatedImageUrl: string;
 }
 
+export type WipePhase = "none" | "covering" | "revealing";
+
 export function useCsvData() {
   const [rows, setRows] = useState<PanoRow[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnnotated, setShowAnnotated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [wiping, setWiping] = useState(false);
+  const [wipePhase, setWipePhase] = useState<WipePhase>("none");
 
   useEffect(() => {
     Papa.parse(CSV_URL, {
@@ -49,17 +51,18 @@ export function useCsvData() {
   }, []);
 
   const advanceRow = useCallback(() => {
-    // Start wipe
-    setWiping(true);
-    // At midpoint of wipe (screen fully black), switch row
+    // Phase 1: cover screen with black from top-left
+    setWipePhase("covering");
+    // At full coverage, switch content and start reveal
     setTimeout(() => {
       setCurrentIndex((idx) => (idx + 1) % rows.length);
       setShowAnnotated(false);
-    }, WIPE_DURATION / 2);
-    // End wipe
+      setWipePhase("revealing");
+    }, WIPE_HALF);
+    // Phase 2 complete: reveal done
     setTimeout(() => {
-      setWiping(false);
-    }, WIPE_DURATION);
+      setWipePhase("none");
+    }, WIPE_HALF * 2);
   }, [rows.length]);
 
   useEffect(() => {
@@ -70,7 +73,7 @@ export function useCsvData() {
           return true;
         } else {
           advanceRow();
-          return prev; // keep true until wipe midpoint resets it
+          return prev;
         }
       });
     }, DISPLAY_DURATION);
@@ -79,7 +82,7 @@ export function useCsvData() {
 
   const currentRow = rows[currentIndex];
 
-  return { currentRow, showAnnotated, loading, rows, currentIndex, wiping };
+  return { currentRow, showAnnotated, loading, rows, currentIndex, wipePhase };
 }
 
-export { WIPE_DURATION };
+export { WIPE_HALF };
