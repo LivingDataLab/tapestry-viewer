@@ -72,6 +72,7 @@ const Index = () => {
           key={`map-${currentRow.rawImageUrl}`}
           latitude={currentRow.latitude}
           longitude={currentRow.longitude}
+          showAnnotated={showAnnotated}
         />
       </div>
       <InfoOverlay
