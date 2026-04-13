@@ -13,6 +13,8 @@ interface MapOverlayProps {
 
 const MASK =
   "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)";
+const MASK_RAW =
+  "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 91%, transparent 100%)";
 
 const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => {
   const rawContainerRef = useRef<HTMLDivElement>(null);
@@ -167,8 +169,8 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          maskImage: MASK,
-          WebkitMaskImage: MASK,
+          maskImage: MASK_RAW,
+          WebkitMaskImage: MASK_RAW,
           opacity: showAnnotated ? 0 : 0.66,
           transition: "opacity 1s ease-in-out",
         }}
