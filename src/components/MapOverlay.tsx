@@ -12,7 +12,7 @@ interface MapOverlayProps {
 }
 
 const MASK =
-  "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)";
+  "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 98%, transparent 100%)";
 const MASK_RAW =
   "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 91%, transparent 100%)";
 
@@ -82,7 +82,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
             annMap.setPaintProperty(layer.id, "background-opacity", 0);
           } else if (layer.type === "fill" && layer.id !== "road") {
             try {
-              annMap.setPaintProperty(layer.id, "fill-opacity", 0.85);
+              annMap.setPaintProperty(layer.id, "fill-opacity", 0.92);
             } catch {}
           }
         }
