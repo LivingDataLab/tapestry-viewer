@@ -57,12 +57,14 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
         }
       }
 
-      // Animate zoom
-      map.easeTo({
-        zoom: 12.5,
-        duration: 3000,
-        easing: (t) => t, // linear
-      });
+      // Animate zoom after 3s delay
+      setTimeout(() => {
+        map.easeTo({
+          zoom: 12.5,
+          duration: 3000,
+          easing: (t) => t,
+        });
+      }, 3000);
     });
 
     return () => {
@@ -100,11 +102,11 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
             width: "1700px",
             height: "700px",
             borderRadius: "50%",
-            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 65%, transparent 85%)",
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.3) 60%, transparent 70%)",
             position: "absolute",
             top: "50%",
             left: "50%",
-            transform: "translate(-50%, -40%)",
+            transform: "translate(-50%, -45%)",
           }}
         />
       </div>
@@ -114,8 +116,8 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          maskImage: "radial-gradient(ellipse 750px 340px at center 45%, black 0%, black 50%, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 45%, black 0%, black 50%, transparent 75%)",
+          maskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 50%, transparent 70%)",
+          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 50%, transparent 70%)",
           opacity: 0.85,
         }}
       />
