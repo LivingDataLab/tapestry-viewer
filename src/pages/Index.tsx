@@ -50,17 +50,20 @@ const Index = () => {
           distanceToDetroit: currentRow.distanceToDetroit,
         }}
       />
-      {/* Wipe from top-left transition */}
+      {/* Diagonal wipe from top-left to bottom-right through black */}
       <div
         style={{
           position: "fixed",
-          inset: 0,
+          top: "-10%",
+          left: "-10%",
+          width: "120%",
+          height: "120%",
           zIndex: 100,
           background: "#000",
           pointerEvents: "none",
           clipPath: wiping
-            ? "circle(200% at 0% 0%)"
-            : "circle(0% at 0% 0%)",
+            ? "polygon(0% 0%, 250% 0%, 0% 250%)"
+            : "polygon(0% 0%, 0% 0%, 0% 0%)",
           transition: `clip-path ${WIPE_DURATION / 2}ms ease-in-out`,
         }}
       />
