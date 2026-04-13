@@ -46,7 +46,7 @@ function getWipeTransition(phase: WipePhase): string {
 }
 
 const Index = () => {
-  const { currentRow, showAnnotated, loading, wipePhase } = useCsvData();
+  const { currentRow, showAnnotated, loading, wipePhase, overlaysVisible } = useCsvData();
 
   if (loading || !currentRow) return <LoadingScreen />;
 
@@ -62,11 +62,18 @@ const Index = () => {
           showAnnotated={showAnnotated}
         />
       </Suspense>
-      <MapOverlay
-        key={`map-${currentRow.rawImageUrl}`}
-        latitude={currentRow.latitude}
-        longitude={currentRow.longitude}
-      />
+      <div
+        style={{
+          opacity: overlaysVisible ? 1 : 0,
+          transition: "opacity 1s ease-in-out",
+        }}
+      >
+        <MapOverlay
+          key={`map-${currentRow.rawImageUrl}`}
+          latitude={currentRow.latitude}
+          longitude={currentRow.longitude}
+        />
+      </div>
       <InfoOverlay
         data={{
           city: currentRow.city,
@@ -76,6 +83,7 @@ const Index = () => {
         }}
         showAnnotated={showAnnotated}
         isWiping={isWiping}
+        overlaysVisible={overlaysVisible}
       />
       {/* Diagonal wipe overlay */}
       <div
