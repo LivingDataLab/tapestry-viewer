@@ -11,24 +11,6 @@ interface InfoOverlayProps {
   isWiping?: boolean;
 }
 
-/*
- * All dimensions from the reference SVG (3840×2160, 16:9).
- * We use vw for everything so the layout scales uniformly.
- * 2160/3840 = 0.5625, so 1 SVG-Y-px = (px / 3840 * 100 / 0.5625) ... 
- * Simpler: just use vw for horizontal and vertical since aspect ratio is fixed.
- * Vertical SVG-px to vw: px / 3840 * 100 * (3840/2160) = px / 2160 * 100 ... 
- * Actually let's just convert everything to % of 3840 width using vw.
- * For vertical: svgPx(height_in_svg * 3840/2160) ... no.
- * 
- * Cleanest: everything in vw. 
- * Horizontal: px / 3840 * 100 vw
- * Vertical: px / 2160 * 100 * (9/16) ... no.
- * 
- * On a 16:9 screen: 100vw = 3840 SVG-px, 56.25vw = 2160 SVG-px.
- * So vertical SVG-px to vw = px / 2160 * 56.25 = px * 0.02604vw
- * Horizontal SVG-px to vw = px / 3840 * 100 = px * 0.02604vw
- * They're the same! 1 SVG-px = 0.02604vw in both axes. Perfect.
- */
 const s = (px: number) => `${(px / 3840) * 100}vw`;
 
 const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
@@ -37,6 +19,8 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
   const latDisplay = Math.abs(data.latitude).toFixed(2);
   const lonDisplay = Math.abs(data.longitude).toFixed(2);
   const distDisplay = data.distanceToDetroit.toFixed(2);
+
+  const showMachineVision = showAnnotated && !isWiping;
 
   return (
     <div
@@ -47,7 +31,7 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
         pointerEvents: "none",
       }}
     >
-      {/* Top info bar – centered at x=1920 */}
+      {/* Top info bar – centered */}
       <div
         style={{
           position: "absolute",
@@ -57,21 +41,23 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: s(1134), // ~566*2
+          width: s(1134),
         }}
       >
-        {/* City name rounded-top box: y≈29 to y≈160, ~131px tall */}
+        {/* City name rounded-top box */}
         <div
           style={{
             width: "100%",
             background: "#000",
             borderRadius: `${s(20)} ${s(20)} 0 0`,
-            height: s(160), // from top of viewport to bottom of city box
+            height: s(160),
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             paddingTop: s(20),
             boxSizing: "border-box",
+            position: "relative",
+            zIndex: 2,
           }}
         >
           <span
@@ -88,9 +74,8 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
           </span>
         </div>
 
-        {/* Bottom tabs row: y=160 to y=215, height=55 */}
-        <div style={{ display: "flex", width: "100%" }}>
-          {/* Left tab - coordinates */}
+        {/* Bottom tabs row */}
+        <div style={{ display: "flex", width: "100%", position: "relative", zIndex: 2 }}>
           <div
             style={{
               background: "var(--info-bar-left)",
@@ -115,7 +100,6 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
               {latDisplay}°{latDir}, {lonDisplay}°{lonDir}
             </span>
           </div>
-          {/* Right tab - distance */}
           <div
             style={{
               background: "var(--info-bar-right)",
@@ -140,6 +124,36 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
               {distDisplay} miles to Detroit
             </span>
           </div>
+        </div>
+
+        {/* Machine Vision View bar – slides from behind the tabs */}
+        <div
+          style={{
+            width: "100%",
+            height: s(50),
+            background: "#2424e6",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            zIndex: 1,
+            marginTop: showMachineVision ? 0 : `calc(-1 * ${s(50)})`,
+            opacity: showMachineVision ? 1 : 0,
+            transition: "margin-top 1.5s ease-out, opacity 1.5s ease-out",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Ubuntu Mono', monospace",
+              fontWeight: 400,
+              fontSize: s(29),
+              color: "hsl(var(--foreground))",
+              whiteSpace: "nowrap",
+              lineHeight: 1,
+            }}
+          >
+            Machine Vision View
+          </span>
         </div>
       </div>
 
@@ -170,50 +184,7 @@ const InfoOverlay = ({ data, showAnnotated, isWiping }: InfoOverlayProps) => {
         </span>
       </div>
 
-      {/* Machine Vision View bar */}
-      <div
-        style={{
-          position: "absolute",
-          top: s(30),
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: s(1134),
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          pointerEvents: "none",
-        }}
-      >
-        <div style={{ height: s(215) }} /> {/* spacer for city + tabs */}
-        <div
-          style={{
-            width: "100%",
-            height: s(50),
-            background: "#2424e6",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            transform: showAnnotated ? "translateY(0)" : `translateY(${s(-50)})`,
-            opacity: showAnnotated ? 1 : 0,
-            transition: "transform 1.5s ease-out, opacity 1.5s ease-out",
-          }}
-        >
-          <span
-            style={{
-              fontFamily: "'Ubuntu Mono', monospace",
-              fontWeight: 400,
-              fontSize: s(29),
-              color: "hsl(var(--foreground))",
-              whiteSpace: "nowrap",
-              lineHeight: 1,
-            }}
-          >
-            Machine Vision View
-          </span>
-        </div>
-      </div>
-
-      {/* Bottom fade: y=1802.27 to y=2160, height=357.73 */}
+      {/* Bottom fade */}
       <div
         style={{
           position: "absolute",
