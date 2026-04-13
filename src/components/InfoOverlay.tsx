@@ -122,6 +122,33 @@ const InfoOverlay = ({ data }: InfoOverlayProps) => {
         </div>
       </div>
 
+      {/* Development Preview badge - upper right */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          background: "red",
+          padding: "0 30px",
+          height: "108px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-display)",
+            fontWeight: 800,
+            fontSize: "45px",
+            color: "hsl(var(--foreground))",
+            whiteSpace: "nowrap",
+          }}
+        >
+          DEVELOPMENT PREVIEW
+        </span>
+      </div>
+
       {/* Bottom fade */}
       <div
         style={{
