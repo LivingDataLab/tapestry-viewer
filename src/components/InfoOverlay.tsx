@@ -172,7 +172,7 @@ const InfoOverlay = ({ data, showAnnotated, isWiping, overlaysVisible = true }: 
             bottom: 0,
             left: 0,
             right: 0,
-            height: s(357.73),
+            height: s(357.73 + 855),
             background: "var(--bottom-fade)",
           }}
         />
