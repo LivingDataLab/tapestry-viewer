@@ -120,8 +120,8 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          maskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 96%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 96%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)",
           opacity: 1,
         }}
       />
