@@ -17,10 +17,13 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Downtown Detroit as starting center
+    const detroitCenter: [number, number] = [-83.0458, 42.3314];
+
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: "mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5",
-      center: [longitude, latitude],
+      center: detroitCenter,
       zoom: 10.15,
       pitch: 65,
       bearing: 0,
@@ -57,14 +60,15 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
         }
       }
 
-      // Animate zoom after 3s delay
+      // Animate zoom after 7.5s delay, pan to CSV location over 5s
       setTimeout(() => {
-        map.easeTo({
+        map.flyTo({
+          center: [longitude, latitude],
           zoom: 12.5,
-          duration: 3000,
+          duration: 5000,
           easing: (t) => t,
         });
-      }, 6000);
+      }, 7500);
     });
 
     return () => {
@@ -116,8 +120,8 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          maskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 96%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 96%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 750px 290px at center 52%, black 0%, black 96%, transparent 100%)",
           opacity: 1,
         }}
       />
