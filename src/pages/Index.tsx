@@ -53,7 +53,16 @@ const Index = () => {
   const isWiping = wipePhase !== "none";
 
   return (
-    <div style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh", overflow: "hidden" }}>
+    <div style={{
+      position: "fixed",
+      inset: 0,
+      width: "100vw",
+      height: "100vh",
+      overflow: "hidden",
+      border: showAnnotated ? "5px solid #3B82F6" : "none",
+      transition: "border 1s ease-in-out",
+      boxSizing: "border-box",
+    }}>
       <Suspense fallback={<LoadingScreen />}>
         <PanoramaViewer
           key={currentRow.rawImageUrl}
