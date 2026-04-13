@@ -63,11 +63,11 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
       .setLngLat([longitude, latitude])
       .addTo(annMap);
 
-    // Also add dot to raw map
+    // Also add dot to raw map (red)
     const dot2 = document.createElement("div");
     dot2.className = "pulsing-dot";
     const innerDot2 = document.createElement("div");
-    innerDot2.className = "pulse-dot";
+    innerDot2.className = "pulse-dot pulse-dot-red";
     dot2.appendChild(innerDot2);
     new mapboxgl.Marker({ element: dot2 })
       .setLngLat([longitude, latitude])
