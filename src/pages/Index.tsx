@@ -1,16 +1,52 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Suspense } from "react";
+import PanoramaViewer from "@/components/PanoramaViewer";
+import InfoOverlay from "@/components/InfoOverlay";
+import { useCsvData } from "@/hooks/useCsvData";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const LoadingScreen = () => (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "hsl(var(--background))",
+    }}
+  >
+    <span
+      style={{
+        fontFamily: "var(--font-display)",
+        fontWeight: 500,
+        fontSize: "32px",
+        color: "hsl(var(--muted-foreground))",
+      }}
+    >
+      Loading…
+    </span>
+  </div>
+);
+
+const Index = () => {
+  const { currentRow, loading } = useCsvData();
+
+  if (loading || !currentRow) return <LoadingScreen />;
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh", overflow: "hidden" }}>
+      <Suspense fallback={<LoadingScreen />}>
+        <PanoramaViewer key={currentRow.rawImageUrl} imageUrl={currentRow.rawImageUrl} />
+      </Suspense>
+      <InfoOverlay
+        data={{
+          city: currentRow.city,
+          latitude: currentRow.latitude,
+          longitude: currentRow.longitude,
+          distanceToDetroit: currentRow.distanceToDetroit,
+        }}
+      />
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
