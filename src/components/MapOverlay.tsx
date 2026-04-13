@@ -24,8 +24,6 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
 
   const detroitCenter: [number, number] = [-83.0458, 42.3314];
 
-  const cacheBust = `?fresh=${Date.now()}`;
-
   // Shared map options
   const sharedOpts = {
     center: detroitCenter as [number, number],
@@ -42,7 +40,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
     // --- Raw map (shown during raw_image) ---
     const rawMap = new mapboxgl.Map({
       container: rawContainerRef.current,
-      style: `mapbox://styles/theavclub/cmnwlu0fm001601qvamstaa1w${cacheBust}`,
+      style: "mapbox://styles/theavclub/cmnwlu0fm001601qvamstaa1w",
       ...sharedOpts,
     });
     rawMapRef.current = rawMap;
@@ -50,7 +48,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
     // --- Annotated map (shown during annotated_image) ---
     const annMap = new mapboxgl.Map({
       container: annContainerRef.current,
-      style: `mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5${cacheBust}`,
+      style: "mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5",
       ...sharedOpts,
     });
     annMapRef.current = annMap;
