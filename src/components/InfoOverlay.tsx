@@ -8,6 +8,7 @@ interface LocationData {
 interface InfoOverlayProps {
   data: LocationData;
   showAnnotated: boolean;
+  isWiping?: boolean;
 }
 
 /*
