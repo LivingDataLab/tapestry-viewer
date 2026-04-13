@@ -64,7 +64,7 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           duration: 3000,
           easing: (t) => t,
         });
-      }, 3000);
+      }, 6000);
     });
 
     return () => {
@@ -116,9 +116,9 @@ const MapOverlay = ({ latitude, longitude }: MapOverlayProps) => {
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          maskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 50%, transparent 70%)",
-          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 50%, transparent 70%)",
-          opacity: 0.85,
+          maskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 96%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 750px 340px at center 42%, black 0%, black 96%, transparent 100%)",
+          opacity: 1,
         }}
       />
       <style>{`
