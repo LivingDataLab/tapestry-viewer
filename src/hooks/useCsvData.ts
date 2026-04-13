@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import Papa from "papaparse";
 
 const CSV_URL =
-  "https://raw.githubusercontent.com/LivingDataLab/tapestries/refs/heads/main/panos/point_language_with_info.csv";
+  "http://raw.githubusercontent.com/LivingDataLab/tapestries/main/panos/point_language_with_info_census.csv";
 const BASE_IMAGE_URL =
   "https://raw.githubusercontent.com/LivingDataLab/tapestries/main/panos/";
 
