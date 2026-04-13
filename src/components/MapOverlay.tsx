@@ -82,7 +82,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
             annMap.setPaintProperty(layer.id, "background-opacity", 0);
           } else if (layer.type === "fill" && layer.id !== "road") {
             try {
-              annMap.setPaintProperty(layer.id, "fill-opacity", 0.15);
+              annMap.setPaintProperty(layer.id, "fill-opacity", 0.35);
             } catch {}
           }
         }
