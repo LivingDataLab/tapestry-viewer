@@ -94,7 +94,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
       setTimeout(() => {
         annMap.flyTo({
           center: [longitude, latitude],
-          zoom: 12.5,
+          zoom: 13,
           duration: 5000,
           easing: (t) => t,
         });
@@ -106,7 +106,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
       setTimeout(() => {
         rawMap.flyTo({
           center: [longitude, latitude],
-          zoom: 12.5,
+          zoom: 13,
           duration: 5000,
           easing: (t) => t,
         });
