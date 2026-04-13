@@ -53,7 +53,7 @@ const FadingSphere = ({ imageUrl, opacity, rotationRef }: PanoramaSphereProps) =
     }
     if (materialRef.current) {
       // Smoothly lerp opacity
-      materialRef.current.opacity += (opacity - materialRef.current.opacity) * 0.05;
+      materialRef.current.opacity += (opacity - materialRef.current.opacity) * 0.025;
     }
   });
 
