@@ -89,7 +89,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
       }
     });
 
-    // Zoom sequence on annotated map after 7.5s
+    // Zoom sequence on annotated map after 5s
     annMap.on("load", () => {
       setTimeout(() => {
         annMap.flyTo({
