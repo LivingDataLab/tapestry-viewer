@@ -50,7 +50,7 @@ const MapOverlay = ({ latitude, longitude, showAnnotated }: MapOverlayProps) => 
     // --- Annotated map (shown during annotated_image) ---
     const annMap = new mapboxgl.Map({
       container: annContainerRef.current,
-      style: "mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5",
+      style: `mapbox://styles/theavclub/cmnv31zrk00cf01qt5k8x2pj5${cacheBust}`,
       ...sharedOpts,
     });
     annMapRef.current = annMap;
