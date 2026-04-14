@@ -10,6 +10,12 @@ const DISPLAY_DURATION = 45000;
 const WIPE_HALF = 800; // time for each half of the wipe
 const OVERLAY_FADE_DELAY = 500; // delay before overlays fade in after wipe
 
+export interface PopSegment {
+  label: string;
+  pct: number;
+  color: string;
+}
+
 export interface PanoRow {
   city: string;
   latitude: number;
@@ -21,6 +27,7 @@ export interface PanoRow {
   nonEnglishPct: number;
   topNonEnglish: string[];
   fastestEthnicities: { name: string; growthPct: number }[];
+  populationShare: PopSegment[];
 }
 
 export type WipePhase = "none" | "covering" | "revealing";
@@ -48,6 +55,25 @@ export function useCsvData() {
               .split(",")
               .map((l: string) => l.trim())
               .filter(Boolean);
+            const popFields = [
+              { key: "pop_2023_white_nh", label: "White", color: "#3b82f6" },
+              { key: "pop_2023_black", label: "Black", color: "#555555" },
+              { key: "pop_2023_hispanic", label: "Hispanic/Latino", color: "#f5a623" },
+              { key: "pop_2023_east_asian", label: "E. Asian", color: "#e63b2e" },
+              { key: "pop_2023_south_asian", label: "S. Asian", color: "#f5d638" },
+              { key: "pop_2023_middle_eastern", label: "Middle Eastern", color: "#4cd97b" },
+              { key: "pop_2023_other", label: "Other", color: "#a855f7" },
+            ];
+            const popRaw = popFields.map(f => ({ ...f, val: parseFloat(row[f.key]) || 0 }));
+            const popTotal = popRaw.reduce((sum, p) => sum + p.val, 0);
+            const populationShare: PopSegment[] = popRaw
+              .filter(p => p.val > 0)
+              .map(p => ({
+                label: p.label,
+                pct: popTotal > 0 ? parseFloat(((p.val / popTotal) * 100).toFixed(2)) : 0,
+                color: p.color,
+              }));
+
             return {
               city: row["City"] || "Unknown",
               latitude: parseFloat(row["Latitude"]) || 0,
@@ -64,6 +90,7 @@ export function useCsvData() {
                 { name: row["fastest_prop_2"] || "", growthPct: parseFloat(row["fastest_prop_2_pp"]) || 0 },
                 { name: row["fastest_prop_3"] || "", growthPct: parseFloat(row["fastest_prop_3_pp"]) || 0 },
               ].filter(e => e.name),
+              populationShare,
             };
           })
           .filter((r: PanoRow) => r.rawImageUrl !== BASE_IMAGE_URL);
