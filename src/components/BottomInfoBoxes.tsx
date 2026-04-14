@@ -13,6 +13,17 @@ interface BottomInfoBoxesProps {
   fastestEthnicities: { name: string; growthPct: number }[];
 }
 
+const ETHNICITY_COLORS: Record<string, string> = {
+  "Arab/Middle Eastern": "#4cd97b",
+  "Hispanic or Latino": "#f5d638",
+  "East Asian": "#e63b2e",
+  "South Asian": "#f5a623",
+};
+
+const getEthnicityColor = (name: string): string => {
+  return ETHNICITY_COLORS[name] || "#fff";
+};
+
 const headerFont = {
   fontFamily: "'Ubuntu Mono', monospace",
   fontWeight: 700,
@@ -155,7 +166,7 @@ const BottomInfoBoxes = ({
             </div>
             <div style={{ flex: 1 }}>
               <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
-                Fastest Growing Ethnicities (2010 – 2020)
+                Fastest Growing Ethnicities (2010 – 20)
               </span>
             </div>
           </div>
@@ -177,7 +188,7 @@ const BottomInfoBoxes = ({
                     transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
                   }}
                 >
-                  <div style={{ width: s(8), background: "#fff", flexShrink: 0 }} />
+                  <div style={{ width: s(8), background: getEthnicityColor(eth.name), flexShrink: 0 }} />
                   <div
                     style={{
                       flex: 1,
