@@ -40,7 +40,9 @@ export function useCsvData() {
       complete: (results) => {
         const parsed: PanoRow[] = results.data
           .map((row: any) => {
-            const nonEngPct = parseFloat(row["% Non-English"]) || 0;
+            const engCount = parseFloat(row["English Count"]) || 0;
+            const nonEngCount = parseFloat(row["Non-English Count"]) || 0;
+            const total = engCount + nonEngCount;
             const topLangs = (row["Top 3 Non-English"] || "")
               .split(",")
               .map((l: string) => l.trim())
@@ -53,8 +55,8 @@ export function useCsvData() {
                 parseFloat(row["Distance_to_CampusMartius_mi"]) || 0,
               rawImageUrl: BASE_IMAGE_URL + (row["raw_image"] || ""),
               annotatedImageUrl: BASE_IMAGE_URL + (row["annotated_image"] || ""),
-              englishPct: parseFloat(((1 - nonEngPct) * 100).toFixed(1)),
-              nonEnglishPct: parseFloat((nonEngPct * 100).toFixed(1)),
+              englishPct: total > 0 ? parseFloat(((engCount / total) * 100).toFixed(2)) : 0,
+              nonEnglishPct: total > 0 ? parseFloat(((nonEngCount / total) * 100).toFixed(2)) : 0,
               topNonEnglish: topLangs,
             };
           })

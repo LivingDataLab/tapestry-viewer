@@ -49,10 +49,10 @@ const HalfDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEngli
       <path d={describeArc(180, engAngleEnd)} fill="none" stroke="#0000ff" strokeWidth={stroke} strokeLinecap="butt" />
       <path d={describeArc(engAngleEnd + 0.5, 360)} fill="none" stroke="#8f8f8f" strokeWidth={stroke} strokeLinecap="butt" />
       {/* English label */}
-      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(1)}%</text>
+      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(2)}%</text>
       <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid)) + 18} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="var(--font-display)">English</text>
       {/* Non-English label */}
-      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{nonEnglishPct.toFixed(1)}%</text>
+      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{nonEnglishPct.toFixed(2)}%</text>
       <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid)) + 18} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="var(--font-display)">Non-English</text>
     </svg>
   );
@@ -177,42 +177,33 @@ const BottomInfoBoxes = ({
             flex: 1,
             minHeight: s(320),
             borderRadius: `0 0 0 ${s(20)}`,
-            padding: `${s(24)} ${s(32)}`,
+            padding: `${s(16)} ${s(32)}`,
             display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: s(40),
+            flexDirection: "column",
+            gap: s(8),
           }}
         >
-          {/* Left side – half-donut chart */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
-            <div
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: s(22),
-                color: "rgba(255,255,255,0.7)",
-                textAlign: "center",
-                marginTop: s(12),
-              }}
-            >
-              Proportion of Languages Identified
+          {/* Top labels row */}
+          <div style={{ display: "flex", gap: s(40) }}>
+            <div style={{ flex: 1 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+                Proportion of Languages Identified
+              </span>
+            </div>
+            <div style={{ flex: 1 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+                Most Identified Non-English Languages
+              </span>
             </div>
           </div>
-
-          {/* Right side – language bars */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12), justifyContent: "center" }}>
-            <div
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: s(22),
-                color: "rgba(255,255,255,0.7)",
-                marginBottom: s(8),
-              }}
-            >
-              Most Identified Non-English Languages
+          {/* Content row: donut + bars aligned */}
+          <div style={{ display: "flex", gap: s(40), flex: 1, alignItems: "flex-start" }}>
+            {/* Left – donut */}
+            <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+              <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
+            </div>
+            {/* Right – bars */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12) }}>
             </div>
             {topNonEnglish.map((lang, i) => (
               <div
