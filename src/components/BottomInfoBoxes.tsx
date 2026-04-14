@@ -48,18 +48,6 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
           <span style={headerFont}>
             Area Demographics
           </span>
-          <span
-            style={{
-              fontFamily: "'Ubuntu Mono', monospace",
-              fontWeight: 400,
-              fontStyle: "italic",
-              fontSize: s(24),
-              color: "rgba(255,255,255,0.85)",
-              lineHeight: 1,
-            }}
-          >
-            *within a 20-minute drive of this point
-          </span>
         </div>
         {/* Gray body with rounded bottom-right */}
         <div
