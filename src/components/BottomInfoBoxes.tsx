@@ -46,7 +46,7 @@ const HalfDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEngli
 
   return (
     <svg viewBox={`0 0 ${size} ${size * 0.58}`} style={{ width: s(280), height: s(162) }}>
-      <path d={describeArc(180, engAngleEnd)} fill="none" stroke="#0000ff" strokeWidth={stroke} strokeLinecap="butt" />
+      <path d={describeArc(180, engAngleEnd)} fill="none" stroke="#ffffff" strokeWidth={stroke} strokeLinecap="butt" />
       <path d={describeArc(engAngleEnd + 0.5, 360)} fill="none" stroke="#8f8f8f" strokeWidth={stroke} strokeLinecap="butt" />
       {/* English label */}
       <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(2)}%</text>
