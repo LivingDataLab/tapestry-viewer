@@ -198,7 +198,7 @@ const BottomInfoBoxes = ({
             height: s(50),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "center",
+            alignItems: "baseline",
             gap: s(16),
           }}
         >
@@ -231,7 +231,7 @@ const BottomInfoBoxes = ({
             {/* Right – ethnicity bars */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
               <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", marginBottom: s(16) }}>
-                Fastest Growing Ethnicities (2010 – 20)
+                Fastest Growing (2010 – 20)
               </span>
               <div style={{ display: "flex", flexDirection: "column", gap: s(12) }}>
               {fastestEthnicities.map((eth, i) => (
