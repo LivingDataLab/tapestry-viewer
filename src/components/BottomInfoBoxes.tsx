@@ -10,6 +10,7 @@ interface BottomInfoBoxesProps {
   topNonEnglish: string[];
   englishPct: number;
   nonEnglishPct: number;
+  fastestEthnicities: { name: string; growthPct: number }[];
 }
 
 const headerFont = {
@@ -64,13 +65,16 @@ const BottomInfoBoxes = ({
   topNonEnglish,
   englishPct,
   nonEnglishPct,
+  fastestEthnicities,
 }: BottomInfoBoxesProps) => {
   const [visibleBars, setVisibleBars] = useState(0);
+  const [visibleEthBars, setVisibleEthBars] = useState(0);
 
   // Reset bars immediately when overlays disappear (wipe starting)
   useEffect(() => {
     if (!overlaysVisible) {
       setVisibleBars(0);
+      setVisibleEthBars(0);
     }
   }, [overlaysVisible]);
 
@@ -86,6 +90,18 @@ const BottomInfoBoxes = ({
     });
     return () => timers.forEach(clearTimeout);
   }, [overlaysVisible, topNonEnglish]);
+
+  // Stagger ethnicity bars
+  useEffect(() => {
+    if (!overlaysVisible || fastestEthnicities.length === 0) return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    fastestEthnicities.forEach((_, i) => {
+      timers.push(
+        setTimeout(() => setVisibleEthBars((v) => Math.max(v, i + 1)), (i + 1) * STAGGER_DELAY)
+      );
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [overlaysVisible, fastestEthnicities]);
 
   return (
     <div
