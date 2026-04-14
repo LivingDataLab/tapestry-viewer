@@ -148,16 +148,17 @@ const BottomInfoBoxes = ({
             gap: s(40),
           }}
         >
-          {/* Left side – half-donut placeholder area */}
+          {/* Left side – half-donut chart */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            {/* Donut chart placeholder — will be filled later */}
+            <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
             <div
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 500,
-                fontSize: s(28),
-                color: "rgba(255,255,255,0.9)",
+                fontSize: s(22),
+                color: "rgba(255,255,255,0.7)",
                 textAlign: "center",
+                marginTop: s(12),
               }}
             >
               Proportion of Languages Identified
