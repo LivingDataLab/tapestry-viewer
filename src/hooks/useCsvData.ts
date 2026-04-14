@@ -119,6 +119,17 @@ export function useCsvData() {
     }, WIPE_HALF * 2 + OVERLAY_FADE_DELAY);
   }, [rows.length]);
 
+  // Preload next row's images so Suspense doesn't flash "Loading"
+  useEffect(() => {
+    if (rows.length < 2) return;
+    const nextIndex = (currentIndex + 1) % rows.length;
+    const next = rows[nextIndex];
+    const img1 = new Image();
+    const img2 = new Image();
+    img1.src = next.rawImageUrl;
+    img2.src = next.annotatedImageUrl;
+  }, [rows, currentIndex]);
+
   useEffect(() => {
     if (rows.length === 0) return;
     const interval = setInterval(() => {
