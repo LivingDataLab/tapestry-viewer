@@ -184,14 +184,14 @@ const BottomInfoBoxes = ({
           }}
         >
           {/* Top labels row */}
-          <div style={{ display: "flex", gap: s(40) }}>
+          <div style={{ display: "flex", gap: s(40), marginBottom: s(16) }}>
             <div style={{ flex: 1 }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
-                Proportion of Languages Identified
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+                % of Languages Identified
               </span>
             </div>
             <div style={{ flex: 1 }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
                 Top Non-Eng. Languages
               </span>
             </div>
