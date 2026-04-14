@@ -283,6 +283,7 @@ const BottomInfoBoxes = ({
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           </div>
         </div>
