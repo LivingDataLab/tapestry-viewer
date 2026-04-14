@@ -20,7 +20,43 @@ const headerFont = {
   lineHeight: 1,
 } as const;
 
-const STAGGER_DELAY = 400; // ms between each bar appearing
+const STAGGER_DELAY = 400;
+
+const HalfDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEnglishPct: number }) => {
+  const size = 280;
+  const stroke = 40;
+  const r = (size - stroke) / 2;
+  const cx = size / 2;
+  const cy = size / 2;
+  const engAngleEnd = 180 + (englishPct / 100) * 180;
+  const toRad = (a: number) => (a * Math.PI) / 180;
+
+  const describeArc = (startAngle: number, endAngle: number) => {
+    const x1 = cx + r * Math.cos(toRad(startAngle));
+    const y1 = cy + r * Math.sin(toRad(startAngle));
+    const x2 = cx + r * Math.cos(toRad(endAngle));
+    const y2 = cy + r * Math.sin(toRad(endAngle));
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
+  };
+
+  const labelR = r * 0.55;
+  const engMid = 180 + (englishPct / 100) * 90;
+  const nonEngMid = engAngleEnd + (nonEnglishPct / 100) * 90;
+
+  return (
+    <svg viewBox={`0 0 ${size} ${size * 0.58}`} style={{ width: s(280), height: s(162) }}>
+      <path d={describeArc(180, engAngleEnd)} fill="none" stroke="#0000ff" strokeWidth={stroke} strokeLinecap="butt" />
+      <path d={describeArc(engAngleEnd + 0.5, 360)} fill="none" stroke="#8f8f8f" strokeWidth={stroke} strokeLinecap="butt" />
+      {/* English label */}
+      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(1)}%</text>
+      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid)) + 18} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="var(--font-display)">English</text>
+      {/* Non-English label */}
+      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{nonEnglishPct.toFixed(1)}%</text>
+      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid)) + 18} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="var(--font-display)">Non-English</text>
+    </svg>
+  );
+};
 
 const BottomInfoBoxes = ({
   overlaysVisible,
