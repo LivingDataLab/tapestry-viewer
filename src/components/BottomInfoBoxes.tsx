@@ -202,54 +202,46 @@ const BottomInfoBoxes = ({
             <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
               <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
             </div>
-            {/* Right – bars */}
+            {/* Right – bars (stacked vertically) */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12) }}>
-            </div>
-            {topNonEnglish.map((lang, i) => (
-              <div
-                key={lang}
-                style={{
-                  display: "flex",
-                  alignItems: "stretch",
-                  height: s(55),
-                  opacity: i < visibleBars ? 1 : 0,
-                  transform: i < visibleBars ? "translateX(0)" : "translateX(20px)",
-                  transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
-                }}
-              >
-                {/* White accent bar */}
+              {topNonEnglish.map((lang, i) => (
                 <div
+                  key={lang}
                   style={{
-                    width: s(8),
-                    background: "#fff",
-                    flexShrink: 0,
-                  }}
-                />
-                {/* Label block */}
-                <div
-                  style={{
-                    flex: 1,
-                    background: "rgba(255, 255, 255, 0.5)",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: `0 ${s(16)}`,
+                    alignItems: "stretch",
+                    height: s(55),
+                    opacity: i < visibleBars ? 1 : 0,
+                    transform: i < visibleBars ? "translateX(0)" : "translateX(20px)",
+                    transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
                   }}
                 >
-                  <span
+                  <div style={{ width: s(8), background: "#fff", flexShrink: 0 }} />
+                  <div
                     style={{
-                      fontFamily: "var(--font-display)",
-                      fontWeight: 600,
-                      fontSize: s(30),
-                      color: "#000",
-                      whiteSpace: "nowrap",
+                      flex: 1,
+                      background: "rgba(255, 255, 255, 0.5)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: `0 ${s(16)}`,
                     }}
                   >
-                    {lang}
-                  </span>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 600,
+                        fontSize: s(30),
+                        color: "#000",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {lang}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
