@@ -203,7 +203,7 @@ const BottomInfoBoxes = ({
           }}
         >
           <span style={headerFont}>Demographics</span>
-          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20-minutes of this point</span>
+          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20 minutes of this location</span>
         </div>
         <div
           style={{
@@ -305,7 +305,7 @@ const BottomInfoBoxes = ({
           }}
         >
           <span style={headerFont}>Linguistic Diversity</span>
-          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20-minutes of this location</span>
+          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20 minutes of this location</span>
         </div>
         <div
           style={{
