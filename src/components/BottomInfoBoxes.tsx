@@ -317,27 +317,23 @@ const BottomInfoBoxes = ({
             gap: s(8),
           }}
         >
-          {/* Top labels row */}
-          <div style={{ display: "flex", gap: s(40), marginBottom: s(16) }}>
-            <div style={{ flex: 1 }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
-                % of Languages Identified
-              </span>
-            </div>
-            <div style={{ flex: 1 }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", display: "block", textAlign: "left" }}>
-                Top Non-Eng. Languages
-              </span>
-            </div>
-          </div>
           {/* Content row: donut + bars aligned */}
           <div style={{ display: "flex", gap: s(40), flex: 1, alignItems: "flex-start" }}>
             {/* Left – donut */}
-            <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-              <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
+            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", marginBottom: s(16) }}>
+                % of Languages Identified
+              </span>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
+              </div>
             </div>
             {/* Right – bars (stacked vertically) */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12) }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", marginBottom: s(16) }}>
+                Top Non-Eng. Languages
+              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: s(12) }}>
               {topNonEnglish.map((lang, i) => (
                 <div
                   key={lang}
