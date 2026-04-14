@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { PopSegment } from "@/hooks/useCsvData";
 
 const s = (px: number) => `${(px / 3840) * 100}vw`;
 
@@ -11,6 +12,7 @@ interface BottomInfoBoxesProps {
   englishPct: number;
   nonEnglishPct: number;
   fastestEthnicities: { name: string; growthPct: number }[];
+  populationShare: PopSegment[];
 }
 
 const ETHNICITY_COLORS: Record<string, string> = {
@@ -72,6 +74,60 @@ const HalfDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEngli
   );
 };
 
+const PopDonut = ({ segments }: { segments: PopSegment[] }) => {
+  const size = 280;
+  const stroke = 36;
+  const r = (size - stroke) / 2;
+  const cx = size / 2;
+  const cy = size / 2;
+  const toRad = (a: number) => (a * Math.PI) / 180;
+
+  const describeArc = (startAngle: number, endAngle: number) => {
+    const x1 = cx + r * Math.cos(toRad(startAngle));
+    const y1 = cy + r * Math.sin(toRad(startAngle));
+    const x2 = cx + r * Math.cos(toRad(endAngle));
+    const y2 = cy + r * Math.sin(toRad(endAngle));
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
+  };
+
+  let angle = -90; // start from top
+  const arcs = segments.map((seg) => {
+    const sweep = (seg.pct / 100) * 360;
+    const start = angle;
+    const end = angle + sweep;
+    angle = end;
+    return { ...seg, start, end };
+  });
+
+  // label radius
+  const labelR = r * 0.6;
+
+  return (
+    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: s(260), height: s(260) }}>
+      {arcs.map((arc, i) => (
+        <path key={i} d={describeArc(arc.start, arc.end - 0.3)} fill="none" stroke={arc.color} strokeWidth={stroke} strokeLinecap="butt" />
+      ))}
+      {arcs.map((arc, i) => {
+        const mid = (arc.start + arc.end) / 2;
+        const x = cx + labelR * Math.cos(toRad(mid));
+        const y = cy + labelR * Math.sin(toRad(mid));
+        if (arc.pct < 3) return null; // skip tiny labels
+        return (
+          <g key={`label-${i}`}>
+            <text x={x} y={y - 6} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="13" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">
+              {arc.pct.toFixed(2)}%
+            </text>
+            <text x={x} y={y + 8} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.8)" fontSize="9" fontFamily="var(--font-display)">
+              {arc.label}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+};
+
 const BottomInfoBoxes = ({
   overlaysVisible,
   showAnnotated,
@@ -79,6 +135,7 @@ const BottomInfoBoxes = ({
   englishPct,
   nonEnglishPct,
   fastestEthnicities,
+  populationShare,
 }: BottomInfoBoxesProps) => {
   const [visibleBars, setVisibleBars] = useState(0);
   const [visibleEthBars, setVisibleEthBars] = useState(0);
@@ -174,8 +231,10 @@ const BottomInfoBoxes = ({
           </div>
           {/* Content row */}
           <div style={{ display: "flex", gap: s(40), flex: 1, alignItems: "flex-start" }}>
-            {/* Left – placeholder for population chart */}
-            <div style={{ flex: 1 }} />
+            {/* Left – population donut */}
+            <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+              <PopDonut segments={populationShare} />
+            </div>
             {/* Right – ethnicity bars */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12) }}>
               {fastestEthnicities.map((eth, i) => (
