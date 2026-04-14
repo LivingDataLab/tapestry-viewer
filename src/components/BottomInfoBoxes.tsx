@@ -10,7 +10,7 @@ interface BottomInfoBoxesProps {
 const headerFont = {
   fontFamily: "'Ubuntu Mono', monospace",
   fontWeight: 700,
-  fontSize: s(52),
+  fontSize: s(29),
   color: "#fff",
   lineHeight: 1,
 } as const;
