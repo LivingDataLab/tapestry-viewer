@@ -38,13 +38,12 @@ const headerFont = {
 
 const STAGGER_DELAY = 400;
 
-const HalfDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEnglishPct: number }) => {
+const LangDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEnglishPct: number }) => {
   const size = 280;
-  const stroke = 40;
+  const stroke = 36;
   const r = (size - stroke) / 2;
   const cx = size / 2;
   const cy = size / 2;
-  const engAngleEnd = 180 + (englishPct / 100) * 180;
   const toRad = (a: number) => (a * Math.PI) / 180;
 
   const describeArc = (startAngle: number, endAngle: number) => {
@@ -56,20 +55,23 @@ const HalfDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEngli
     return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
   };
 
-  const labelR = r * 0.55;
-  const engMid = 180 + (englishPct / 100) * 90;
-  const nonEngMid = engAngleEnd + (nonEnglishPct / 100) * 90;
+  const engSweep = (englishPct / 100) * 360;
+  const engStart = -90;
+  const engEnd = engStart + engSweep;
+  const nonEngEnd = engEnd + (nonEnglishPct / 100) * 360;
+
+  const labelR = r * 0.6;
+  const engMid = (engStart + engEnd) / 2;
+  const nonEngMid = (engEnd + nonEngEnd) / 2;
 
   return (
-    <svg viewBox={`0 0 ${size} ${size * 0.58}`} style={{ width: s(280), height: s(162) }}>
-      <path d={describeArc(180, engAngleEnd)} fill="none" stroke="#ffffff" strokeWidth={stroke} strokeLinecap="butt" />
-      <path d={describeArc(engAngleEnd + 0.5, 360)} fill="none" stroke="#8f8f8f" strokeWidth={stroke} strokeLinecap="butt" />
-      {/* English label */}
-      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(2)}%</text>
-      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid)) + 18} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="var(--font-display)">English</text>
-      {/* Non-English label */}
-      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid))} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="20" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{nonEnglishPct.toFixed(2)}%</text>
-      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid)) + 18} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.7)" fontSize="11" fontFamily="var(--font-display)">Non-English</text>
+    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: s(260), height: s(260) }}>
+      <path d={describeArc(engStart, engEnd)} fill="none" stroke="#ffffff" strokeWidth={stroke} strokeLinecap="butt" />
+      <path d={describeArc(engEnd + 0.3, nonEngEnd)} fill="none" stroke="#8f8f8f" strokeWidth={stroke} strokeLinecap="butt" />
+      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid)) - 6} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="13" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(2)}%</text>
+      <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid)) + 8} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.8)" fontSize="9" fontFamily="var(--font-display)">English</text>
+      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid)) - 6} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="13" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{nonEnglishPct.toFixed(2)}%</text>
+      <text x={cx + labelR * Math.cos(toRad(nonEngMid))} y={cy + labelR * Math.sin(toRad(nonEngMid)) + 8} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.8)" fontSize="9" fontFamily="var(--font-display)">Non-English</text>
     </svg>
   );
 };
