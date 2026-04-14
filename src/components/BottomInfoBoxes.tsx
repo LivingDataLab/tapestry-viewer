@@ -197,10 +197,10 @@ const BottomInfoBoxes = ({
             background: showAnnotated ? "#0000ff" : "#e60000",
             transition: "background 1s ease-in-out",
             borderRadius: `0 ${s(20)} 0 0`,
-            height: s(50),
+            height: s(58),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "baseline",
+            alignItems: "center",
             gap: s(16),
           }}
         >
@@ -299,10 +299,10 @@ const BottomInfoBoxes = ({
             background: showAnnotated ? "#0000ff" : "#2ecc71",
             transition: "background 1s ease-in-out",
             borderRadius: `${s(20)} 0 0 0`,
-            height: s(50),
+            height: s(58),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "baseline",
+            alignItems: "center",
             gap: s(16),
           }}
         >
