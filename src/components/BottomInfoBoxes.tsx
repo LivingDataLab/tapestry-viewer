@@ -65,7 +65,7 @@ const LangDonut = ({ englishPct, nonEnglishPct }: { englishPct: number; nonEngli
   const nonEngMid = (engEnd + nonEngEnd) / 2;
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: s(260), height: s(260) }}>
+    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: s(189), height: s(189) }}>
       <path d={describeArc(engStart, engEnd)} fill="none" stroke="#ffffff" strokeWidth={stroke} strokeLinecap="butt" />
       <path d={describeArc(engEnd + 0.3, nonEngEnd)} fill="none" stroke="#8f8f8f" strokeWidth={stroke} strokeLinecap="butt" />
       <text x={cx + labelR * Math.cos(toRad(engMid))} y={cy + labelR * Math.sin(toRad(engMid)) - 6} textAnchor="middle" dominantBaseline="middle" fill="#fff" fontSize="13" fontFamily="'Ubuntu Mono', monospace" fontWeight="700">{englishPct.toFixed(2)}%</text>
@@ -106,7 +106,7 @@ const PopDonut = ({ segments }: { segments: PopSegment[] }) => {
   const labelR = r * 0.6;
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: s(260), height: s(260) }}>
+    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: s(189), height: s(189) }}>
       {arcs.map((arc, i) => (
         <path key={i} d={describeArc(arc.start, arc.end - 0.3)} fill="none" stroke={arc.color} strokeWidth={stroke} strokeLinecap="butt" />
       ))}
