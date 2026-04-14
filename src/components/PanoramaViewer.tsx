@@ -38,8 +38,9 @@ const GlitchMaterial = shaderMaterial(
       float lineNoise = step(0.97, rand(vec2(floor(uv.y * 80.0), floor(time * 4.0))));
       float shift = lineNoise * (rand(vec2(time, uv.y)) - 0.5) * 0.012 * glitchIntensity;
 
-      // RGB channel separation
-      float chromaShift = 0.003 * glitchIntensity * sin(time * 6.0 + uv.y * 20.0);
+      // RGB channel separation — rare random bursts
+      float chromaBurst = step(0.985, rand(vec2(floor(time * 1.5), 3.7)));
+      float chromaShift = chromaBurst * 0.004 * glitchIntensity * sin(time * 6.0 + uv.y * 20.0);
 
       float r = texture2D(map, uv + vec2(shift + chromaShift, 0.0)).r;
       float g = texture2D(map, uv + vec2(shift, 0.0)).g;
