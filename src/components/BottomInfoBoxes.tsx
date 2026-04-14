@@ -329,7 +329,7 @@ const BottomInfoBoxes = ({
                 % of Languages Identified
               </span>
               <div style={{ display: "flex", justifyContent: "center" }}>
-                <HalfDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
+                <LangDonut englishPct={englishPct} nonEnglishPct={nonEnglishPct} />
               </div>
             </div>
             {/* Right – bars (stacked vertically) */}
