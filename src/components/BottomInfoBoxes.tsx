@@ -10,6 +10,7 @@ interface BottomInfoBoxesProps {
   topNonEnglish: string[];
   englishPct: number;
   nonEnglishPct: number;
+  fastestEthnicities: { name: string; growthPct: number }[];
 }
 
 const headerFont = {
@@ -64,13 +65,16 @@ const BottomInfoBoxes = ({
   topNonEnglish,
   englishPct,
   nonEnglishPct,
+  fastestEthnicities,
 }: BottomInfoBoxesProps) => {
   const [visibleBars, setVisibleBars] = useState(0);
+  const [visibleEthBars, setVisibleEthBars] = useState(0);
 
   // Reset bars immediately when overlays disappear (wipe starting)
   useEffect(() => {
     if (!overlaysVisible) {
       setVisibleBars(0);
+      setVisibleEthBars(0);
     }
   }, [overlaysVisible]);
 
@@ -86,6 +90,18 @@ const BottomInfoBoxes = ({
     });
     return () => timers.forEach(clearTimeout);
   }, [overlaysVisible, topNonEnglish]);
+
+  // Stagger ethnicity bars
+  useEffect(() => {
+    if (!overlaysVisible || fastestEthnicities.length === 0) return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    fastestEthnicities.forEach((_, i) => {
+      timers.push(
+        setTimeout(() => setVisibleEthBars((v) => Math.max(v, i + 1)), (i + 1) * STAGGER_DELAY)
+      );
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [overlaysVisible, fastestEthnicities]);
 
   return (
     <div
@@ -124,33 +140,82 @@ const BottomInfoBoxes = ({
             flex: 1,
             minHeight: s(320),
             borderRadius: `0 0 ${s(20)} 0`,
-            padding: `${s(24)} ${s(32)}`,
+            padding: `${s(16)} ${s(32)}`,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "flex-end",
+            gap: s(8),
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: s(28),
-                color: "rgba(255,255,255,0.9)",
-              }}
-            >
-              2020 Population Share
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: s(28),
-                color: "rgba(255,255,255,0.9)",
-              }}
-            >
-              Fastest Growing Ethnicities (2010 – 2020)
-            </span>
+          {/* Top labels row */}
+          <div style={{ display: "flex", gap: s(40), marginBottom: s(16) }}>
+            <div style={{ flex: 1 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+                2020 Population Share
+              </span>
+            </div>
+            <div style={{ flex: 1 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+                Fastest Growing Ethnicities (2010 – 2020)
+              </span>
+            </div>
+          </div>
+          {/* Content row */}
+          <div style={{ display: "flex", gap: s(40), flex: 1, alignItems: "flex-start" }}>
+            {/* Left – placeholder for population chart */}
+            <div style={{ flex: 1 }} />
+            {/* Right – ethnicity bars */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12) }}>
+              {fastestEthnicities.map((eth, i) => (
+                <div
+                  key={eth.name}
+                  style={{
+                    display: "flex",
+                    alignItems: "stretch",
+                    height: s(55),
+                    opacity: i < visibleEthBars ? 1 : 0,
+                    transform: i < visibleEthBars ? "translateX(0)" : "translateX(20px)",
+                    transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
+                  }}
+                >
+                  <div style={{ width: s(8), background: "#fff", flexShrink: 0 }} />
+                  <div
+                    style={{
+                      flex: 1,
+                      background: "rgba(255, 255, 255, 0.5)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: `0 ${s(16)}`,
+                      gap: s(8),
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 600,
+                        fontSize: s(30),
+                        color: "#000",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {eth.name}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 600,
+                        fontSize: s(26),
+                        color: "#000",
+                        whiteSpace: "nowrap",
+                        opacity: 0.7,
+                      }}
+                    >
+                      (+{eth.growthPct.toFixed(2)}%)
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -102,6 +102,7 @@ const Index = () => {
         topNonEnglish={currentRow.topNonEnglish}
         englishPct={currentRow.englishPct}
         nonEnglishPct={currentRow.nonEnglishPct}
+        fastestEthnicities={currentRow.fastestEthnicities}
       />
       {/* Diagonal wipe overlay */}
       <div
