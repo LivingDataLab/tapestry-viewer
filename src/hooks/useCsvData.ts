@@ -20,6 +20,7 @@ export interface PanoRow {
   englishPct: number;
   nonEnglishPct: number;
   topNonEnglish: string[];
+  fastestEthnicities: { name: string; growthPct: number }[];
 }
 
 export type WipePhase = "none" | "covering" | "revealing";
@@ -58,6 +59,11 @@ export function useCsvData() {
               englishPct: total > 0 ? parseFloat(((engCount / total) * 100).toFixed(2)) : 0,
               nonEnglishPct: total > 0 ? parseFloat(((nonEngCount / total) * 100).toFixed(2)) : 0,
               topNonEnglish: topLangs,
+              fastestEthnicities: [
+                { name: row["fastest_prop_1"] || "", growthPct: parseFloat(row["fastest_prop_1_pp"]) || 0 },
+                { name: row["fastest_prop_2"] || "", growthPct: parseFloat(row["fastest_prop_2_pp"]) || 0 },
+                { name: row["fastest_prop_3"] || "", growthPct: parseFloat(row["fastest_prop_3_pp"]) || 0 },
+              ].filter(e => e.name),
             };
           })
           .filter((r: PanoRow) => r.rawImageUrl !== BASE_IMAGE_URL);
