@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const s = (px: number) => `${(px / 3840) * 100}vw`;
 
