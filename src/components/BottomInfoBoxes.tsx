@@ -192,7 +192,7 @@ const BottomInfoBoxes = ({
             </div>
             <div style={{ flex: 1 }}>
               <span style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
-                Most Identified Non-English Languages
+                Top Non-Eng. Languages
               </span>
             </div>
           </div>
