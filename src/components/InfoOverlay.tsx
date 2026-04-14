@@ -185,8 +185,8 @@ const InfoOverlay = ({ data, showAnnotated, isWiping, overlaysVisible = true }: 
           top: 0,
           right: 0,
           background: "red",
-          width: s(733.45),
-          height: s(107.85),
+          width: s(489),
+          height: s(72),
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -196,7 +196,7 @@ const InfoOverlay = ({ data, showAnnotated, isWiping, overlaysVisible = true }: 
           style={{
             fontFamily: "var(--font-display)",
             fontWeight: 800,
-            fontSize: s(45),
+            fontSize: s(30),
             color: "hsl(var(--foreground))",
             whiteSpace: "nowrap",
           }}
