@@ -224,7 +224,7 @@ const BottomInfoBoxes = ({
               </span>
             </div>
             <div style={{ flex: 1 }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", display: "block", textAlign: "left" }}>
                 Fastest Growing Ethnicities (2010 – 20)
               </span>
             </div>
@@ -264,8 +264,8 @@ const BottomInfoBoxes = ({
                     <span
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontWeight: 600,
-                        fontSize: s(30),
+                        fontWeight: 400,
+                        fontSize: s(29),
                         color: "#000",
                         whiteSpace: "nowrap",
                       }}
@@ -275,8 +275,8 @@ const BottomInfoBoxes = ({
                     <span
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontWeight: 600,
-                        fontSize: s(26),
+                        fontWeight: 400,
+                        fontSize: s(29),
                         color: "#000",
                         whiteSpace: "nowrap",
                         opacity: 0.7,
@@ -328,7 +328,7 @@ const BottomInfoBoxes = ({
               </span>
             </div>
             <div style={{ flex: 1 }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", display: "block", textAlign: "left" }}>
                 Top Non-Eng. Languages
               </span>
             </div>
@@ -367,8 +367,8 @@ const BottomInfoBoxes = ({
                     <span
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontWeight: 600,
-                        fontSize: s(30),
+                        fontWeight: 400,
+                        fontSize: s(29),
                         color: "#000",
                         whiteSpace: "nowrap",
                       }}
