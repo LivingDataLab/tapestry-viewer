@@ -1,15 +1,79 @@
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader, extend } from "@react-three/fiber";
 import { useRef, useMemo, useEffect } from "react";
 import * as THREE from "three";
+import { shaderMaterial } from "@react-three/drei";
+
+/* ── Glitch shader material ── */
+const GlitchMaterial = shaderMaterial(
+  {
+    map: null,
+    opacity: 1.0,
+    time: 0.0,
+    glitchIntensity: 0.0,
+  },
+  // vertex
+  `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  // fragment
+  `
+    uniform sampler2D map;
+    uniform float opacity;
+    uniform float time;
+    uniform float glitchIntensity;
+    varying vec2 vUv;
+
+    float rand(vec2 co) {
+      return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+    }
+
+    void main() {
+      vec2 uv = vUv;
+
+      // Sporadic horizontal shift bursts
+      float lineNoise = step(0.97, rand(vec2(floor(uv.y * 80.0), floor(time * 4.0))));
+      float shift = lineNoise * (rand(vec2(time, uv.y)) - 0.5) * 0.012 * glitchIntensity;
+
+      // RGB channel separation
+      float chromaShift = 0.003 * glitchIntensity * sin(time * 6.0 + uv.y * 20.0);
+
+      float r = texture2D(map, uv + vec2(shift + chromaShift, 0.0)).r;
+      float g = texture2D(map, uv + vec2(shift, 0.0)).g;
+      float b = texture2D(map, uv + vec2(shift - chromaShift, 0.0)).b;
+
+      // Faint scanlines
+      float scanline = 1.0 - 0.04 * glitchIntensity * step(0.5, fract(uv.y * 400.0 + time * 2.0));
+
+      gl_FragColor = vec4(vec3(r, g, b) * scanline, opacity);
+    }
+  `
+);
+
+extend({ GlitchMaterial });
+
+// Augment JSX for the custom material
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      glitchMaterial: any;
+    }
+  }
+}
 
 interface PanoramaSphereProps {
   imageUrl: string;
   opacity: number;
   rotationRef: React.MutableRefObject<number>;
+  glitch?: boolean;
 }
 
-const PanoramaSphere = ({ imageUrl, opacity, rotationRef }: PanoramaSphereProps) => {
+const FadingSphere = ({ imageUrl, opacity, rotationRef, glitch = false }: PanoramaSphereProps) => {
   const meshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<any>(null);
   const texture = useLoader(THREE.TextureLoader, imageUrl);
 
   useMemo(() => {
@@ -17,50 +81,30 @@ const PanoramaSphere = ({ imageUrl, opacity, rotationRef }: PanoramaSphereProps)
   }, [texture]);
 
   useFrame((_, delta) => {
-    // Shared rotation so both spheres stay in sync
-    rotationRef.current += (Math.PI * 2 * delta) / 45;
-    if (meshRef.current) {
-      meshRef.current.rotation.y = rotationRef.current;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef} scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 64, 32]} />
-      <meshBasicMaterial map={texture} side={THREE.BackSide} transparent opacity={opacity} />
-    </mesh>
-  );
-};
-
-interface DualPanoramaViewerProps {
-  rawImageUrl: string;
-  annotatedImageUrl: string;
-  showAnnotated: boolean;
-}
-
-const FadingSphere = ({ imageUrl, opacity, rotationRef }: PanoramaSphereProps) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
-  const texture = useLoader(THREE.TextureLoader, imageUrl);
-
-  useMemo(() => {
-    texture.colorSpace = THREE.SRGBColorSpace;
-  }, [texture]);
-
-  useFrame(() => {
     if (meshRef.current) {
       meshRef.current.rotation.y = rotationRef.current;
     }
     if (materialRef.current) {
-      // Smoothly lerp opacity
       materialRef.current.opacity += (opacity - materialRef.current.opacity) * 0.025;
+      materialRef.current.time += delta;
+      // Smoothly ramp glitch intensity
+      const targetGlitch = glitch ? 1.0 : 0.0;
+      materialRef.current.glitchIntensity += (targetGlitch - materialRef.current.glitchIntensity) * 0.03;
     }
   });
 
   return (
     <mesh ref={meshRef} scale={[-1, 1, 1]}>
       <sphereGeometry args={[500, 64, 32]} />
-      <meshBasicMaterial ref={materialRef} map={texture} side={THREE.BackSide} transparent opacity={0} />
+      <glitchMaterial
+        ref={materialRef}
+        map={texture}
+        side={THREE.BackSide}
+        transparent
+        opacity={0}
+        time={0}
+        glitchIntensity={0}
+      />
     </mesh>
   );
 };
@@ -72,10 +116,15 @@ const RotationDriver = ({ rotationRef }: { rotationRef: React.MutableRefObject<n
   return null;
 };
 
+interface DualPanoramaViewerProps {
+  rawImageUrl: string;
+  annotatedImageUrl: string;
+  showAnnotated: boolean;
+}
+
 const DualPanoramaViewer = ({ rawImageUrl, annotatedImageUrl, showAnnotated }: DualPanoramaViewerProps) => {
   const rotationRef = useRef(0);
 
-  // Reset rotation when row changes (raw URL changes)
   useEffect(() => {
     rotationRef.current = 0;
   }, [rawImageUrl]);
@@ -97,6 +146,7 @@ const DualPanoramaViewer = ({ rawImageUrl, annotatedImageUrl, showAnnotated }: D
           imageUrl={annotatedImageUrl}
           opacity={showAnnotated ? 1 : 0}
           rotationRef={rotationRef}
+          glitch={showAnnotated}
         />
       </Canvas>
     </div>
