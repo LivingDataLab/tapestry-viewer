@@ -53,8 +53,8 @@ export function useCsvData() {
                 parseFloat(row["Distance_to_CampusMartius_mi"]) || 0,
               rawImageUrl: BASE_IMAGE_URL + (row["raw_image"] || ""),
               annotatedImageUrl: BASE_IMAGE_URL + (row["annotated_image"] || ""),
-              englishPct: Math.round((1 - nonEngPct) * 100),
-              nonEnglishPct: Math.round(nonEngPct * 100),
+              englishPct: parseFloat(((1 - nonEngPct) * 100).toFixed(1)),
+              nonEnglishPct: parseFloat((nonEngPct * 100).toFixed(1)),
               topNonEnglish: topLangs,
             };
           })
