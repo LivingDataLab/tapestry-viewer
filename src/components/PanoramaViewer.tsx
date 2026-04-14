@@ -35,7 +35,7 @@ const GlitchMaterial = shaderMaterial(
       vec2 uv = vUv;
 
       // Sporadic horizontal shift bursts
-      float lineNoise = step(0.97, rand(vec2(floor(uv.y * 80.0), floor(time * 4.0))));
+      float lineNoise = step(0.98, rand(vec2(floor(uv.y * 80.0), floor(time * 4.0))));
       float shift = lineNoise * (rand(vec2(time, uv.y)) - 0.5) * 0.012 * glitchIntensity;
 
       // RGB channel separation — rare random bursts
