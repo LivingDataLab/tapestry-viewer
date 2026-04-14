@@ -17,6 +17,9 @@ export interface PanoRow {
   distanceToDetroit: number;
   rawImageUrl: string;
   annotatedImageUrl: string;
+  englishPct: number;
+  nonEnglishPct: number;
+  topNonEnglish: string[];
 }
 
 export type WipePhase = "none" | "covering" | "revealing";
@@ -36,15 +39,25 @@ export function useCsvData() {
       skipEmptyLines: true,
       complete: (results) => {
         const parsed: PanoRow[] = results.data
-          .map((row: any) => ({
-            city: row["City"] || "Unknown",
-            latitude: parseFloat(row["Latitude"]) || 0,
-            longitude: parseFloat(row["Longitude"]) || 0,
-            distanceToDetroit:
-              parseFloat(row["Distance_to_CampusMartius_mi"]) || 0,
-            rawImageUrl: BASE_IMAGE_URL + (row["raw_image"] || ""),
-            annotatedImageUrl: BASE_IMAGE_URL + (row["annotated_image"] || ""),
-          }))
+          .map((row: any) => {
+            const nonEngPct = parseFloat(row["% Non-English"]) || 0;
+            const topLangs = (row["Top 3 Non-English"] || "")
+              .split(",")
+              .map((l: string) => l.trim())
+              .filter(Boolean);
+            return {
+              city: row["City"] || "Unknown",
+              latitude: parseFloat(row["Latitude"]) || 0,
+              longitude: parseFloat(row["Longitude"]) || 0,
+              distanceToDetroit:
+                parseFloat(row["Distance_to_CampusMartius_mi"]) || 0,
+              rawImageUrl: BASE_IMAGE_URL + (row["raw_image"] || ""),
+              annotatedImageUrl: BASE_IMAGE_URL + (row["annotated_image"] || ""),
+              englishPct: Math.round((1 - nonEngPct) * 100),
+              nonEnglishPct: Math.round(nonEngPct * 100),
+              topNonEnglish: topLangs,
+            };
+          })
           .filter((r: PanoRow) => r.rawImageUrl !== BASE_IMAGE_URL);
         setRows(parsed);
         setLoading(false);
