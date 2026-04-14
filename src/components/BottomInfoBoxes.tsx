@@ -297,14 +297,15 @@ const BottomInfoBoxes = ({
             background: showAnnotated ? "#0000ff" : "#2ecc71",
             transition: "background 1s ease-in-out",
             borderRadius: `${s(20)} 0 0 0`,
-            height: s(50),
-            padding: `0 ${s(24)}`,
+            height: "auto",
+            padding: `${s(10)} ${s(24)}`,
             display: "flex",
-            alignItems: "center",
+            alignItems: "baseline",
             gap: s(16),
           }}
         >
-          <span style={headerFont}>Area Linguistic Diversity</span>
+          <span style={headerFont}>Linguistic Diversity</span>
+          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20-minutes of this location</span>
         </div>
         <div
           style={{
