@@ -70,7 +70,8 @@ const BottomInfoBoxes = ({
       <div style={{ width: s(BOX_WIDTH), flexShrink: 0, display: "flex", flexDirection: "column" }}>
         <div
           style={{
-            background: "#e60000",
+            background: showAnnotated ? "#0000ff" : "#e60000",
+            transition: "background 1s ease-in-out",
             borderRadius: `0 ${s(20)} 0 0`,
             height: s(50),
             padding: `0 ${s(24)}`,
@@ -122,7 +123,8 @@ const BottomInfoBoxes = ({
       <div style={{ width: s(BOX_WIDTH), flexShrink: 0, display: "flex", flexDirection: "column", marginLeft: "auto" }}>
         <div
           style={{
-            background: "#2ecc71",
+            background: showAnnotated ? "#0000ff" : "#2ecc71",
+            transition: "background 1s ease-in-out",
             borderRadius: `${s(20)} 0 0 0`,
             height: s(50),
             padding: `0 ${s(24)}`,
