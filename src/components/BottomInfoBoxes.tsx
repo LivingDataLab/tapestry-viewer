@@ -202,7 +202,8 @@ const BottomInfoBoxes = ({
             gap: s(16),
           }}
         >
-          <span style={headerFont}>Area Demographics</span>
+          <span style={headerFont}>Demographics</span>
+          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20-minutes of this point</span>
         </div>
         <div
           style={{
