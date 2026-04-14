@@ -30,17 +30,17 @@ const BottomInfoBoxes = ({
   nonEnglishPct,
 }: BottomInfoBoxesProps) => {
   const [visibleBars, setVisibleBars] = useState(0);
-  const prevKeyRef = useRef(topNonEnglish.join(","));
 
-  // Reset and stagger bars when data changes
+  // Reset bars immediately when overlays disappear (wipe starting)
   useEffect(() => {
-    const key = topNonEnglish.join(",");
-    if (key !== prevKeyRef.current) {
+    if (!overlaysVisible) {
       setVisibleBars(0);
-      prevKeyRef.current = key;
     }
+  }, [overlaysVisible]);
 
-    if (topNonEnglish.length === 0) return;
+  // Stagger bars in after overlays become visible again (wipe done)
+  useEffect(() => {
+    if (!overlaysVisible || topNonEnglish.length === 0) return;
 
     const timers: ReturnType<typeof setTimeout>[] = [];
     topNonEnglish.forEach((_, i) => {
@@ -49,7 +49,7 @@ const BottomInfoBoxes = ({
       );
     });
     return () => timers.forEach(clearTimeout);
-  }, [topNonEnglish]);
+  }, [overlaysVisible, topNonEnglish]);
 
   return (
     <div
