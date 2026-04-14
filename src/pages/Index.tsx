@@ -99,6 +99,9 @@ const Index = () => {
       <BottomInfoBoxes
         overlaysVisible={overlaysVisible}
         showAnnotated={showAnnotated}
+        topNonEnglish={currentRow.topNonEnglish}
+        englishPct={currentRow.englishPct}
+        nonEnglishPct={currentRow.nonEnglishPct}
       />
       {/* Diagonal wipe overlay */}
       <div
