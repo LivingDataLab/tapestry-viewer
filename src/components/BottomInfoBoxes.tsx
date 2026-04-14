@@ -179,7 +179,7 @@ const BottomInfoBoxes = ({
     <div
       style={{
         position: "absolute",
-        bottom: s(-20),
+        bottom: s(10),
         left: s(60),
         right: s(60),
         zIndex: 15,
