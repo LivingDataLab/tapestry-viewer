@@ -200,7 +200,7 @@ const BottomInfoBoxes = ({
             height: s(58),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "center",
+            alignItems: "baseline",
             gap: s(16),
           }}
         >
@@ -302,7 +302,7 @@ const BottomInfoBoxes = ({
             height: s(58),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "center",
+            alignItems: "baseline",
             gap: s(16),
           }}
         >
