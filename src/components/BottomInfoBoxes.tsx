@@ -222,8 +222,8 @@ const BottomInfoBoxes = ({
           {/* Content row */}
           <div style={{ display: "flex", gap: s(40), flex: 1, alignItems: "flex-start" }}>
             {/* Left – population donut */}
-            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", marginBottom: s(16) }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: s(22), color: "rgba(255,255,255,0.7)", marginBottom: s(16), textAlign: "center" }}>
                 2020 Population Share
               </span>
               <div style={{ display: "flex", justifyContent: "center" }}>
