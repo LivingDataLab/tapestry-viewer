@@ -1,10 +1,15 @@
+import { useState, useEffect, useRef } from "react";
+
 const s = (px: number) => `${(px / 3840) * 100}vw`;
 
-const BOX_WIDTH = 875; // px in design coords
+const BOX_WIDTH = 875;
 
 interface BottomInfoBoxesProps {
   overlaysVisible: boolean;
   showAnnotated: boolean;
+  topNonEnglish: string[];
+  englishPct: number;
+  nonEnglishPct: number;
 }
 
 const headerFont = {
@@ -15,7 +20,37 @@ const headerFont = {
   lineHeight: 1,
 } as const;
 
-const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProps) => {
+const STAGGER_DELAY = 400; // ms between each bar appearing
+
+const BottomInfoBoxes = ({
+  overlaysVisible,
+  showAnnotated,
+  topNonEnglish,
+  englishPct,
+  nonEnglishPct,
+}: BottomInfoBoxesProps) => {
+  const [visibleBars, setVisibleBars] = useState(0);
+  const prevKeyRef = useRef(topNonEnglish.join(","));
+
+  // Reset and stagger bars when data changes
+  useEffect(() => {
+    const key = topNonEnglish.join(",");
+    if (key !== prevKeyRef.current) {
+      setVisibleBars(0);
+      prevKeyRef.current = key;
+    }
+
+    if (topNonEnglish.length === 0) return;
+
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    topNonEnglish.forEach((_, i) => {
+      timers.push(
+        setTimeout(() => setVisibleBars((v) => Math.max(v, i + 1)), (i + 1) * STAGGER_DELAY)
+      );
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [topNonEnglish]);
+
   return (
     <div
       style={{
@@ -33,7 +68,6 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
     >
       {/* Left box — Area Demographics */}
       <div style={{ width: s(BOX_WIDTH), flexShrink: 0, display: "flex", flexDirection: "column" }}>
-        {/* Red header with right-side rounded corners */}
         <div
           style={{
             background: "#e60000",
@@ -45,11 +79,8 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
             gap: s(16),
           }}
         >
-          <span style={headerFont}>
-            Area Demographics
-          </span>
+          <span style={headerFont}>Area Demographics</span>
         </div>
-        {/* Gray body with rounded bottom-right */}
         <div
           style={{
             background: "rgba(0, 0, 0, 0.65)",
@@ -89,7 +120,6 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
 
       {/* Right box — Area Linguistic Diversity */}
       <div style={{ width: s(BOX_WIDTH), flexShrink: 0, display: "flex", flexDirection: "column", marginLeft: "auto" }}>
-        {/* Green header with left-side rounded corners */}
         <div
           style={{
             background: "#2ecc71",
@@ -101,11 +131,8 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
             gap: s(16),
           }}
         >
-          <span style={headerFont}>
-            Area Linguistic Diversity
-          </span>
+          <span style={headerFont}>Area Linguistic Diversity</span>
         </div>
-        {/* Gray body with rounded bottom-left */}
         <div
           style={{
             background: "rgba(0, 0, 0, 0.65)",
@@ -114,11 +141,86 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
             borderRadius: `0 0 0 ${s(20)}`,
             padding: `${s(24)} ${s(32)}`,
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-end",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: s(40),
           }}
         >
-          {/* Placeholder for content */}
+          {/* Left side – half-donut placeholder area */}
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            {/* Donut chart placeholder — will be filled later */}
+            <div
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 500,
+                fontSize: s(28),
+                color: "rgba(255,255,255,0.9)",
+                textAlign: "center",
+              }}
+            >
+              Proportion of Languages Identified
+            </div>
+          </div>
+
+          {/* Right side – language bars */}
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: s(12), justifyContent: "center" }}>
+            <div
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 500,
+                fontSize: s(22),
+                color: "rgba(255,255,255,0.7)",
+                marginBottom: s(8),
+              }}
+            >
+              Most Identified Non-English Languages
+            </div>
+            {topNonEnglish.map((lang, i) => (
+              <div
+                key={lang}
+                style={{
+                  display: "flex",
+                  alignItems: "stretch",
+                  height: s(55),
+                  opacity: i < visibleBars ? 1 : 0,
+                  transform: i < visibleBars ? "translateX(0)" : "translateX(20px)",
+                  transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
+                }}
+              >
+                {/* White accent bar */}
+                <div
+                  style={{
+                    width: s(8),
+                    background: "#fff",
+                    flexShrink: 0,
+                  }}
+                />
+                {/* Label block */}
+                <div
+                  style={{
+                    flex: 1,
+                    background: "rgba(255, 255, 255, 0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: `0 ${s(16)}`,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontWeight: 600,
+                      fontSize: s(30),
+                      color: "#000",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {lang}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
