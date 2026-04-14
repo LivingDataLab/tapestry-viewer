@@ -15,9 +15,11 @@ interface BottomInfoBoxesProps {
 
 const ETHNICITY_COLORS: Record<string, string> = {
   "Arab/Middle Eastern": "#4cd97b",
-  "Hispanic or Latino": "#f5d638",
+  "Middle Eastern": "#4cd97b",
+  "Hispanic or Latino": "#f5a623",
+  "Hispanic/Latino": "#f5a623",
   "East Asian": "#e63b2e",
-  "South Asian": "#f5a623",
+  "South Asian": "#f5d638",
 };
 
 const getEthnicityColor = (name: string): string => {
