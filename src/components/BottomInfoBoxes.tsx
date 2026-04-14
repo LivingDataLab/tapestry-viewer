@@ -200,12 +200,12 @@ const BottomInfoBoxes = ({
             height: s(58),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "baseline",
+            alignItems: "center",
             gap: s(16),
           }}
         >
           <span style={headerFont}>Demographics</span>
-          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20 minutes of this location</span>
+          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19), alignSelf: "baseline", paddingTop: s(3) }}>within 20 minutes of this location</span>
         </div>
         <div
           style={{
@@ -302,12 +302,12 @@ const BottomInfoBoxes = ({
             height: s(58),
             padding: `0 ${s(24)}`,
             display: "flex",
-            alignItems: "baseline",
+            alignItems: "center",
             gap: s(16),
           }}
         >
           <span style={headerFont}>Linguistic Diversity</span>
-          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19) }}>within 20 minutes of this location</span>
+          <span style={{ ...headerFont, fontWeight: 300, fontSize: s(19), alignSelf: "baseline", paddingTop: s(3) }}>within 20 minutes of this location</span>
         </div>
         <div
           style={{
