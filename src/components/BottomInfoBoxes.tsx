@@ -38,7 +38,7 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
           style={{
             background: "#e60000",
             borderRadius: `0 ${s(20)} 0 0`,
-            height: s(107.85),
+            height: s(50),
             padding: `0 ${s(24)}`,
             display: "flex",
             alignItems: "center",
@@ -94,7 +94,7 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
           style={{
             background: "#2ecc71",
             borderRadius: `${s(20)} 0 0 0`,
-            height: s(107.85),
+            height: s(50),
             padding: `0 ${s(24)}`,
             display: "flex",
             alignItems: "center",
