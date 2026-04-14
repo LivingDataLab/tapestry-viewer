@@ -63,7 +63,7 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
         {/* Gray body with rounded bottom-right */}
         <div
           style={{
-            background: "rgba(80, 80, 80, 0.85)",
+            background: "rgba(0, 0, 0, 0.65)",
             flex: 1,
             minHeight: s(320),
             borderRadius: `0 0 ${s(20)} 0`,
@@ -118,7 +118,7 @@ const BottomInfoBoxes = ({ overlaysVisible, showAnnotated }: BottomInfoBoxesProp
         {/* Gray body with rounded bottom-left */}
         <div
           style={{
-            background: "rgba(80, 80, 80, 0.85)",
+            background: "rgba(0, 0, 0, 0.65)",
             flex: 1,
             minHeight: s(320),
             borderRadius: `0 0 0 ${s(20)}`,
